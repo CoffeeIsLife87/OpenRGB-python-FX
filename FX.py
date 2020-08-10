@@ -1,13 +1,20 @@
-import openrgb , os , time , sys
-
+import openrgb , time 
 from openrgb.utils import DeviceType , RGBColor , ModeData , ModeColors , ModeDirections
+
+import RGBModes
+
+RGBModes.SupportedModes('Corsair Vengeance Pro RGB')
 
 client = openrgb.OpenRGBClient()
 
+client.off()
+
 Dlist = client.devices
 
-for Device in Dlist: # I am pretty sure static is universal
-    Device.set_mode('static')
+for Device in client.devices: #for some devices static = direct
+    print(Device)
+   #if Device.name == 'Corsair Vengeance Pro RGB':
+   #        Device.set_mode('Direct')
     time.sleep(0.25)
 
 def SetDeviceColors(R , G , B):#device , led , R , G , B):
@@ -101,7 +108,11 @@ def SpectrumCycle():
                                                                             RedoLoop = 1
                                                                             break
 
-def Rainbow(Direction):
-    pass
-
-SpectrumCycle()
+def Rainbow():
+    for Device in Dlist:
+        if Device.name == 'Corsair Vengeance Pro RGB':
+            Device.set_mode('rainbow wave')
+        else:
+            Device.set_mode('rainbow')
+#Rainbow()
+#SpectrumCycle()
