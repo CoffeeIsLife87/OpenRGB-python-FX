@@ -1,35 +1,38 @@
-import openrgb , time 
+import openrgb , time , RGBModes
 from openrgb.utils import DeviceType , RGBColor , ModeData , ModeColors , ModeDirections
-
-import RGBModes
-
-RGBModes.SupportedModes('Corsair Vengeance Pro RGB')
 
 client = openrgb.OpenRGBClient()
 
-client.off()
-
 Dlist = client.devices
-
-for Device in client.devices: #for some devices static = direct
-    print(Device)
-   #if Device.name == 'Corsair Vengeance Pro RGB':
-   #        Device.set_mode('Direct')
-    time.sleep(0.25)
 
 def SetDeviceColors(R , G , B):#device , led , R , G , B):
     for i in Dlist:
         i.set_color(RGBColor(R,G,B))
         time.sleep(0.0003)
 
+def wait():
+    time.sleep(0.003)
+
 def DebugRGB(R , G , B):
-    Debug = 1
+    Debug = 0
     if Debug == 1:
         print(R , G , B)
     else:
         return
 
+
 def SpectrumCycle():
+    for Device in Dlist:
+        Device.set_mode(RGBModes.SupportedModes(Device.name , 'cycling'))
+        wait()
+
+def Rainbow():
+    for Device in Dlist:
+        Device.set_mode(RGBModes.SupportedModes(Device.name , 'rainbow'))
+        wait()
+
+# This section is for custom modes
+def CustomSpectrumCycle():
     R = G = B = 0
     RedoLoop = 0
     while 1 == 1:
@@ -107,12 +110,3 @@ def SpectrumCycle():
                                                                         if B == 0:
                                                                             RedoLoop = 1
                                                                             break
-
-def Rainbow():
-    for Device in Dlist:
-        if Device.name == 'Corsair Vengeance Pro RGB':
-            Device.set_mode('rainbow wave')
-        else:
-            Device.set_mode('rainbow')
-#Rainbow()
-#SpectrumCycle()
