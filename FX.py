@@ -1,5 +1,5 @@
-import openrgb , time , RGBModes
-from openrgb.utils import DeviceType , RGBColor , ModeData , ModeColors , ModeDirections
+import openrgb , time , RGBModes , string
+from openrgb.utils import * #DeviceType , RGBColor , ModeData 
 
 client = openrgb.OpenRGBClient()
 
@@ -7,6 +7,7 @@ Dlist = client.devices
 
 def SetDeviceColors(R , G , B):#device , led , R , G , B):
     for i in Dlist:
+        #print(i.id)
         i.set_color(RGBColor(R,G,B))
         time.sleep(0.0003)
 
@@ -20,7 +21,6 @@ def DebugRGB(R , G , B):
     else:
         return
 
-
 def SpectrumCycle():
     for Device in Dlist:
         Device.set_mode(RGBModes.SupportedModes(Device.name , 'cycling'))
@@ -28,7 +28,15 @@ def SpectrumCycle():
 
 def Rainbow():
     for Device in Dlist:
-        Device.set_mode(RGBModes.SupportedModes(Device.name , 'rainbow'))
+        #print(Device)
+        #print(RGBModes.SupportedModes(Device.name , 'rainbow'))
+        for mode in Device.modes:
+            #print(mode.name.lower())
+            #exit()
+        #exit()
+            if mode.name.lower() == RGBModes.SupportedModes(Device.name , 'rainbow'):
+                mode.speed = 2
+                Device.set_mode(mode)
         wait()
 
 # This section is for custom modes
@@ -110,3 +118,11 @@ def CustomSpectrumCycle():
                                                                         if B == 0:
                                                                             RedoLoop = 1
                                                                             break
+
+for Device in client.devices:
+    Device.set_mode(RGBModes.SupportedModes(Device.name , 'static'))
+    wait()
+
+CustomSpectrumCycle()
+#SpectrumCycle()
+#Rainbow()

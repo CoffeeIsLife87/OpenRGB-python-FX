@@ -1,9 +1,10 @@
 
-#an entry contains the following
+# an entry contains the following
 # All possible modes
 # The equivelent of Rainbow
 # The equivelent of cycling
 # The equivelent of static
+# more modes might be added but these are the ones that I think people will use the most
 
 def SupportedModes(Device , Request):
     #MotherBoards
