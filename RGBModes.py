@@ -30,7 +30,7 @@ def SupportedModes(Device , Request):
         Modes = ('off','direct','static','breathing','spectrum cycling','reactive')
         rainbow = 'off'
         cycling = 'spectrum cycle'
-        static = 'direct'
+        static = 'static'
     #Mouse Mats
     if Request == 'possible':
         return Modes
