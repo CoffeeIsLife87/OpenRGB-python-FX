@@ -1,5 +1,6 @@
 import openrgb , time , RGBModes , string
-from openrgb.utils import * #DeviceType , RGBColor , ModeData 
+from openrgb.utils import DeviceType , RGBColor , ModeData
+from LightIndexes import GetIndex
 
 client = openrgb.OpenRGBClient()
 
@@ -35,11 +36,10 @@ def Rainbow():
             #exit()
         #exit()
             if mode.name.lower() == RGBModes.SupportedModes(Device.name , 'rainbow'):
-                mode.speed = 2
+                #mode.speed = 2
                 Device.set_mode(mode)
         wait()
 
-# This section is for custom modes
 def CustomSpectrumCycle():
     CycleSpeed = 3
     R = G = B = 0
@@ -120,7 +120,13 @@ def CustomSpectrumCycle():
                                                                             RedoLoop = 1
                                                                             break
 
+#ram is left to right (0 to 1 to 2 and so forth)
+
 for Device in client.devices:
-    Device.set_mode(RGBModes.SupportedModes(Device.name , 'static'))
-    wait()
+    if Device.id == 0:
+        Device.set_mode(RGBModes.SupportedModes(Device.name,'cycling'))
+    print(GetIndex.HasIndex(Device.name))
+
+#    Device.set_mode(RGBModes.SupportedModes(Device.name , 'static'))
+#    wait()
 

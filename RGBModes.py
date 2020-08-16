@@ -16,10 +16,10 @@ def SupportedModes(Device , Request):
     #CPU coolers
     #RAM
     if Device == 'Corsair Vengeance Pro RGB':
-        Modes = ('off','direct','color shift','color pulse','rainbow wave','color wave','visor','rain','marquee','rainbow','sequential')
+        Modes = ('off','static','color shift','color pulse','rainbow wave','color wave','visor','rain','marquee','rainbow','sequential')
         rainbow = 'rainbow wave'
         cycling = 'rainbow'
-        static = 'direct'
+        static = 'static'
     #GPU's
     #LED strips
     #headsets
