@@ -123,9 +123,8 @@ def CustomSpectrumCycle():
 #ram is left to right (0 to 1 to 2 and so forth)
 
 for Device in client.devices:
-    if Device.id == 0:
-        Device.set_mode(RGBModes.SupportedModes(Device.name,'cycling'))
-    print(GetIndex.HasIndex(Device.name))
+    Device.set_mode(RGBModes.SupportedModes(Device.name,'cycling'))
+    #print(GetIndex.Index(Device.name))
 
 #    Device.set_mode(RGBModes.SupportedModes(Device.name , 'static'))
 #    wait()

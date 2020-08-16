@@ -1,6 +1,6 @@
 import importlib
 
-def HasIndex(CompName):
+def Index(CompName):
     #print(CompName)
     Comp = CompName.replace(' ','')
     Comp = ("LightIndexes.%s"%Comp)
