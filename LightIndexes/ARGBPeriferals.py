@@ -10,5 +10,5 @@ def GetPeriferalInfo(Periferal):
         Leds[0:10,0:1] = np.arange(0,10).reshape(10,1)
         Leds[0:10,7:8] = np.arange(19,9,-1).reshape(10,1)
         Leds[0:10,1:7] = '-1'
-        print(Leds)
-GetPeriferalInfo('T-force Delta Max RGB')
+        LEDmap = Leds
+        return LEDmap
