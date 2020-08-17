@@ -141,4 +141,3 @@ def SetMode(Mode):
 
 #    Device.set_mode(RGBModes.SupportedModes(Device.name , 'static'))
 #    wait()
-
