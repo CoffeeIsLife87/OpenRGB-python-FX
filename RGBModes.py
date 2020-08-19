@@ -13,6 +13,11 @@ def SupportedModes(Device , Request):
         rainbow = 'rainbow'
         cycling = 'wave'
         static = 'static'
+    if Device == 'ASRock Polychrome FW 3.255':
+        Modes = ('off','static','breathing','strobe','spectrum cycle','random','wave','spring','stack','cram','scan','neon','water','rainbow')
+        rainbow = 'rainbow'
+        cycling = 'wave'
+        static = 'static'
     #CPU coolers
     #RAM
     if Device == 'Corsair Vengeance Pro RGB':
@@ -32,11 +37,14 @@ def SupportedModes(Device , Request):
         cycling = 'spectrum cycle'
         static = 'static'
     #Mouse Mats
-    if Request == 'possible':
-        return Modes
-    if Request == 'rainbow':
-        return rainbow
-    if Request == 'cycling':
-        return cycling
-    if Request == 'static':
-        return static
+    try:
+        if Request == 'possible':
+            return Modes
+        if Request == 'rainbow':
+            return rainbow
+        if Request == 'cycling':
+            return cycling
+        if Request == 'static':
+            return static
+    except UnboundLocalError:
+        print(Device)

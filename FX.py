@@ -1,5 +1,4 @@
 import openrgb , time , RGBModes , string
-import tkinter as tk
 from openrgb.utils import DeviceType , RGBColor , ModeData
 from LightIndexes import GetIndex
 
@@ -32,8 +31,6 @@ def SpectrumCycle():
 
 def Rainbow():
     for Device in Dlist:
-        #print(Device)
-        #print(RGBModes.SupportedModes(Device.name , 'rainbow'))
         for mode in Device.modes:
             #print(mode.name.lower())
             #exit()
@@ -124,14 +121,31 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                                                             RedoLoop = 1
                                                                             break
 
-def SetMode(Mode):
+def SetSpecific(Mode , Device , Color=(0,0,0) , Speed=(1) , Direction='down'):
+    for D in Dlist:
+        if D.name == Device:
+            try:
+                Mode.speed=Speed
+            except:
+                pass
+            try:
+                Mode.Direction(Direction)
+            except:
+                pass
+            D.set_mode(Mode)
+            try:
+                D.set_color=RGBColor(Color)
+            except:
+                pass
+
+def SetMode(Mode,color=(255,0,0),speed=1):
     for Device in client.devices:
         if Device.name != 'ASRock Polychrome FW 3.255':
             try:
                 Device.set_mode(RGBModes.SupportedModes(Device.name,Mode))
             except:
                 print('Unable to set %s'%Device.name)
-            
+
 #GUI()
 #ram is left to right (0 to 1 to 2 and so forth)
 
