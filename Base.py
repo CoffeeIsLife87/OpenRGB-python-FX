@@ -1,8 +1,8 @@
-import RGBModes , threading , openrgb , time , string , multiprocessing
+import threading , openrgb , time , string , multiprocessing
 from openrgb.utils import DeviceType , RGBColor , ModeData
-from LightIndexes import GetIndex
 from tkinter import colorchooser
 import tkinter as tk
+import numpy as np
 
 client = openrgb.OpenRGBClient()
 
@@ -13,21 +13,12 @@ def Apply(ModeVar,CurrentDevice,C):
     DeviceID , _ = DeviceID.split(')')
     print(DeviceID)
     Mode = ModeVar.get()
-    SetSpecific(Mode,DeviceID,Color=C)
+    #SetSpecific(Mode,DeviceID,Color=C)
 
-def SetDeviceColors(DeviceID, R , G , B):#device, R , G , B):
-    if DeviceID == 'all':
-        for i in Dlist:
-            if i.name != 'ASRock Polychrome FW 3.255':
-                #print(i.id)
-                i.set_color(RGBColor(R,G,B))
-                time.sleep(0.0003)
-        return
-    else:
-        for i in Dlist:
-            if i.id == int(DeviceID):
-                i.set_color(RGBColor(R,G,B))
-                return
+def SetDeviceColors(R , G , B):#device, R , G , B):
+    for i in Dlist:
+        i.set_color(RGBColor(R,G,B))
+        time.sleep(0.0003)
 
 def wait():
     time.sleep(0.003)
@@ -39,34 +30,20 @@ def DebugRGB(R , G , B):# for printing the values that are being set
     else:
         return
 
-def SetSpecific(Mode , DeviceID , Color=(0,0,255), Speed=(1) , Direction='down'):
-    for D in Dlist:
-        if D.id == int(DeviceID):
-            try:
-                Mode.speed = Speed
-            except:
-                pass
-            try:
-                Mode.Direction(Direction)
-            except:
-                pass
-            D.set_mode(Mode)
-            R = int(Color[0][0])
-            G = int(Color[0][1])
-            B = int(Color[0][2])
-            SetDeviceColors(DeviceID , R,G,B)
-
-def SetMode(Mode,color=(255,0,0),speed=1,Direction='down'):
+def SetStatic():
     for Device in client.devices:
-        if Device.name != 'ASRock Polychrome FW 3.255':
+        print(Device.name,Device.id)
+        wait()
+        try:
             try:
-                Device.set_mode(RGBModes.SupportedModes(Device.name,Mode))
+                Device.set_mode('static')
             except:
-                print('Unable to set %s'%Device.name)
+                Device.set_mode('direct')
+        except:
+            print('Unable to set %s'%Device.name)
 
-def CustomSpectrumCycle(CycleSpeed=''):
-    SetMode('static')
-    CycleSpeed = 3
+def CustomSpectrumCycle(CycleSpeed=3):#
+    SetStatic()
     R = G = B = 0
     RedoLoop = 0
     while 1 == 1:
@@ -74,7 +51,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
             RedoLoop = 0
         R += CycleSpeed
         DebugRGB(R , G , B)
-        SetDeviceColors('all' , R , G , B)
+        SetDeviceColors(R , G , B)
         time.sleep(0.002)
         if R == 255:
             while 1 == 1:
@@ -82,7 +59,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                     break
                 G += CycleSpeed
                 DebugRGB(R , G , B)
-                SetDeviceColors('all' , R , G , B)
+                SetDeviceColors(R , G , B)
                 time.sleep(0.002)
                 if G == 255:
                     while 1 == 1:
@@ -90,7 +67,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                             break
                         R -= CycleSpeed
                         DebugRGB(R , G , B)
-                        SetDeviceColors('all' , R , G , B)
+                        SetDeviceColors(R , G , B)
                         time.sleep(0.002)
                         if R == 0:
                             while 1 == 1:
@@ -98,7 +75,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                     break
                                 B += CycleSpeed
                                 DebugRGB(R , G , B)
-                                SetDeviceColors('all' , R , G , B)
+                                SetDeviceColors(R , G , B)
                                 time.sleep(0.002)
                                 if B == 255:
                                     while 1 == 1:
@@ -106,7 +83,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                             break
                                         G -= CycleSpeed
                                         DebugRGB(R , G , B)
-                                        SetDeviceColors('all' , R , G , B)
+                                        SetDeviceColors(R , G , B)
                                         time.sleep(0.002)
                                         if G == 0:
                                             while 1 == 1:
@@ -114,7 +91,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                                     break
                                                 R += CycleSpeed
                                                 DebugRGB(R , G , B)
-                                                SetDeviceColors('all' , R , G , B)
+                                                SetDeviceColors(R , G , B)
                                                 time.sleep(0.002)
                                                 if R == 255:
                                                     while 1 == 1:
@@ -122,7 +99,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                                             break
                                                         B -= CycleSpeed
                                                         DebugRGB(R , G , B)
-                                                        SetDeviceColors('all' , R , G , B)
+                                                        SetDeviceColors(R , G , B)
                                                         time.sleep(0.002)
                                                         if B == 0:
                                                             while 1 == 1:
@@ -131,7 +108,7 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                                                 G += CycleSpeed
                                                                 B += CycleSpeed
                                                                 DebugRGB(R , G , B)
-                                                                SetDeviceColors('all' , R , G , B)
+                                                                SetDeviceColors(R , G , B)
                                                                 time.sleep(0.002)
                                                                 if (str(R) + str(G) + str(B)) == "255255255":
                                                                     while 1 == 1:
@@ -139,11 +116,23 @@ def CustomSpectrumCycle(CycleSpeed=''):
                                                                         G -= CycleSpeed
                                                                         B -= CycleSpeed
                                                                         DebugRGB(R , G , B)
-                                                                        SetDeviceColors('all' , R , G , B)
+                                                                        SetDeviceColors(R , G , B)
                                                                         time.sleep(0.002)
                                                                         if B == 0:
                                                                             RedoLoop = 1
                                                                             break
+
+CustomSpectrumCycle()
+
+def Sweep(CycleSpeed=3):
+    TFile = open('testfile.txt','w')
+    Dmap = np.zeros((30,30),str)
+    Dmap[:,:] = '0'
+    RAM = Dmap[2:18,22:26] = 'R'
+    print(Dmap)
+
+    for i in Dmap[0:29]:
+        TFile.write(str(i))
 
 ModeList = [[]]
 check = 0
@@ -157,31 +146,11 @@ def FormGUI():
     #------Device Frame---------
     DLocations = tk.LabelFrame(None,width=300,height=300,bg='#3c423d')
     RamZone = tk.Frame(master=DLocations,width=80,height=180)
-    DimmOne = tk.Frame(master=RamZone,width=20,height=180,padx=3)#,bg='black')
+    DimmOne = tk.Frame(master=RamZone,width=20,height=180,padx=3)
     DimmTwo = tk.Frame(master=RamZone,width=20,height=180,padx=3)
-    DimmThree = tk.Frame(master=RamZone,width=20,height=180,padx=3)#,bg='black')
+    DimmThree = tk.Frame(master=RamZone,width=20,height=180,padx=3)
     DimmFour = tk.Frame(master=RamZone,width=20,height=180,padx=3)
-    
-    #RamColorButton = tk.Button(DLocations,text='Ram Button',command=lambda: (DimmOne.!labelframe.LED0.config(bg='blue')) )
-    # I am trying to set a frame color but said frame is declaired in a different file and returned to this one
-    # but it does appear in the GUI so I assume it is still loaded into memory and editable
-    # So I want to do something like "DimmOne.RamDimm.LED0.bg = 'blue'"
-    #RamColorButton.pack()
 
-    def MakeRamLeds():
-        global RamNum
-        for Device in Dlist:
-            if Device.type == DeviceType.DEVICE_TYPE_DRAM:
-                RamNum += 1
-                if RamNum == 1:
-                    GetIndex.Index(Device.name,DimmOne)
-                if RamNum == 2:
-                    GetIndex.Index(Device.name,DimmTwo)
-                if RamNum == 3:
-                    GetIndex.Index(Device.name,DimmThree)
-                if RamNum == 4:
-                    GetIndex.Index(Device.name,DimmFour)
-    MakeRamLeds()
     DimmOne.pack(side='left')
     DimmTwo.pack(side='left')
     DimmThree.pack(side='left')
@@ -211,7 +180,13 @@ def FormGUI():
 
     def ListEventHandler(event):
         DeviceName , _ = CurrentDevice.get().split(' (')
-        NewModeList = (RGBModes.SupportedModes(DeviceName,'possible'))
+        for i in Dlist:
+            if i.name == DeviceName:
+                Mlist = []
+                for mode in i.modes:
+                    Mlist = Mlist + [mode.name]
+                NewModeList = (Mlist)
+                break
 
         def Refresh():
             ModeVar.set('')
@@ -222,7 +197,7 @@ def FormGUI():
                     ModeMenu['menu'].add_command(label=Mode, command=tk._setit(ModeVar, Mode))
         Refresh()
     
-    #------RGB controller presets (non custom)---------
+    #------RGB controller presets---------
     ModeMenu = tk.OptionMenu(DSubFrame,ModeVar,*ModeList)
     ModeMenu.pack(side='left')
     
@@ -233,21 +208,6 @@ def FormGUI():
 
     ColorButton = tk.Button(DSubFrame,text='Pick Color',command=GetColor)
     ColorButton.pack(side='left')
-    
-    SetModeFrame = tk.LabelFrame(None,text='Set Mode to')
-
-    StaticButton = tk.Button(SetModeFrame,text='Static')
-    StaticButton.bind('<Button-1>',StaticButtonHandler)
-    StaticButton.pack(side='left')
-
-    SpectrumCycleButton = tk.Button(SetModeFrame,text='Spectrum Cycling')
-    SpectrumCycleButton.bind('<Button-1>',SpectrumCycleButtonHandler)
-    SpectrumCycleButton.pack(side='left')
-
-    RainbowButton = tk.Button(SetModeFrame,text='Rainbow')
-    RainbowButton.bind('<Button-1>',RainbowButtonHandler)
-    RainbowButton.pack(side='left')
-    SetModeFrame.pack(anchor='se')
 
     ApplyMode = tk.Button(DSubFrame,text='Apply',command=lambda: Apply(ModeVar,CurrentDevice,RGBValue))
 
@@ -269,19 +229,12 @@ def FormGUI():
     OpenRGB_FX.mainloop()
 
 #------Color Button Handlers---------
-def RainbowButtonHandler(event):
-    SetMode('rainbow')
-
-def StaticButtonHandler(event):
-    SetMode('static')
-
-def SpectrumCycleButtonHandler(event):
-    SetMode('cycling')
-
 def CSChander(event):
     CSCProc = threading.Thread(group=None,target=CustomSpectrumCycle(),name='RGBeffectsBackGroundTask')
     CSCProc.daemon = True
     CSCProc.start()
     return
 
-FormGUI()
+#CustomSpectrumCycle()
+
+#FormGUI()
