@@ -122,17 +122,76 @@ def CustomSpectrumCycle(CycleSpeed=3):#
                                                                             RedoLoop = 1
                                                                             break
 
-CustomSpectrumCycle()
+def CustomRainbow(speed=3):
+    
+    Offset = 1
+    def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
+        CBase = []
+        R = G = B = 0
+        while 1 == 1:
+            R += CycleSpeed
+            CBase = CBase + [(R,G,B)]
+            if R == 255:
+                while 1 == 1:
+                    G += CycleSpeed
+                    CBase = CBase + [(R,G,B)]
+                    if G == 255:
+                        while 1 == 1:
+                            R -= CycleSpeed
+                            CBase = CBase + [(R,G,B)]
+                            if R == 0:
+                                while 1 == 1:
+                                    B += CycleSpeed
+                                    CBase = CBase + [(R,G,B)]
+                                    if B == 255:
+                                        while 1 == 1:
+                                            G -= CycleSpeed
+                                            CBase = CBase + [(R,G,B)]
+                                            if G == 0:
+                                                while 1 == 1:
+                                                    R += CycleSpeed
+                                                    CBase = CBase + [(R,G,B)]
+                                                    if R == 255:
+                                                        while 1 == 1:
+                                                            B -= CycleSpeed
+                                                            CBase = CBase + [(R,G,B)]
+                                                            #print(CBase)
+                                                            if B == 0:
+                                                                return CBase
+    CB = P1()
 
-def Sweep(CycleSpeed=3):
-    TFile = open('testfile.txt','w')
-    Dmap = np.zeros((30,30),str)
-    Dmap[:,:] = '0'
-    RAM = Dmap[2:18,22:26] = 'R'
-    print(Dmap)
+    CBase = CB
 
-    for i in Dmap[0:29]:
-        TFile.write(str(i))
+    def wait():
+        time.sleep(float('0.0%d'%speed))
+    
+    Zones = []
+    num = 0
+    
+    for device in Dlist:
+        for zone in device.zones:
+            Zones = Zones + [[zone]]
+            Offset = 1
+            for led in zone.leds:
+                Zones[num] = Zones[num] + [[[led],[Offset]]]
+                Offset += 1
+            num += 1
+    
+    while True:
+        wait()
+        for Z in Zones:
+            CheckVal = len(Z) -1
+            for LED in Z[1:-1]:
+                Color = len(CBase)/CheckVal
+                LEDColor = (int(Color)*LED[1][0])
+                if LEDColor >= len(CBase):
+                    LEDColor = len(CBase) -1
+                CR , CB , CG = CBase[LEDColor]
+                LED[0][0].set_color(RGBColor(CR , CB , CG))
+                if LED[1][0] >= CheckVal:
+                    LED[1][0] = 1
+                else:
+                    LED[1][0] += 1
 
 ModeList = [[]]
 check = 0
@@ -151,12 +210,12 @@ def FormGUI():
     DimmThree = tk.Frame(master=RamZone,width=20,height=180,padx=3)
     DimmFour = tk.Frame(master=RamZone,width=20,height=180,padx=3)
 
-    DimmOne.pack(side='left')
-    DimmTwo.pack(side='left')
-    DimmThree.pack(side='left')
-    DimmFour.pack(side='left')
-    RamZone.pack()
-    DLocations.pack(anchor='ne')
+    #DimmOne.pack(side='left')
+    #DimmTwo.pack(side='left')
+    #DimmThree.pack(side='left')
+    #DimmFour.pack(side='left')
+    #RamZone.pack()
+    #DLocations.pack(anchor='ne')
     
     #------Mode Frame---------
     SpecificDeviceFrame = tk.Frame(None)
@@ -224,17 +283,24 @@ def FormGUI():
     SystemWideSpectrumCycle = tk.Button(SystemWide,text='Spectrum Cycling (broken)')
     SystemWideSpectrumCycle.bind('<Button-1>',CSChander)
     SystemWideSpectrumCycle.pack(side='left')
+    SystemWideRainbow = tk.Button(SystemWide,text='Rainbow')
+    SystemWideRainbow.bind('<Button-1>',CRBhander)
+    SystemWideRainbow.pack(side='left')
     SystemWide.pack(anchor='se')
 
     OpenRGB_FX.mainloop()
 
 #------Color Button Handlers---------
 def CSChander(event):
-    CSCProc = threading.Thread(group=None,target=CustomSpectrumCycle(),name='RGBeffectsBackGroundTask')
+    CSCProc = threading.Thread(group=None,target=CustomSpectrumCycle(),name='RGBEffectsBackGroundTask')
     CSCProc.daemon = True
     CSCProc.start()
     return
 
-#CustomSpectrumCycle()
+def CRBhander(event):
+    CRBProc = threading.Thread(group=None,target=CustomRainbow(),name='RGBEffectsBackGroundTask')
+    CRBProc.daemon = True
+    CRBProc.start()
+    return
 
-#FormGUI()
+FormGUI()
