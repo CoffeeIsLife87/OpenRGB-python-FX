@@ -1,4 +1,4 @@
-import threading , openrgb , time , string , multiprocessing
+import threading , openrgb , time , string , multiprocessing , colorsys
 from openrgb.utils import DeviceType , RGBColor , ModeData
 from tkinter import colorchooser
 import tkinter as tk
@@ -12,7 +12,7 @@ def Apply(ModeVar,CurrentDevice,C):
     _ , DeviceID = CurrentDevice.get().split(' (')
     DeviceID , _ = DeviceID.split(')')
     print(DeviceID)
-    Mode = ModeVar.get()
+    #Mode = ModeVar.get()
     #SetSpecific(Mode,DeviceID,Color=C)
 
 def SetDeviceColors(R , G , B):#device, R , G , B):
@@ -44,86 +44,32 @@ def SetStatic():
 
 def CustomSpectrumCycle(CycleSpeed=3):#
     SetStatic()
-    R = G = B = 0
-    RedoLoop = 0
-    while 1 == 1:
-        if RedoLoop == 1:
-            RedoLoop = 0
-        R += CycleSpeed
-        DebugRGB(R , G , B)
-        SetDeviceColors(R , G , B)
-        time.sleep(0.002)
-        if R == 255:
-            while 1 == 1:
-                if RedoLoop == 1:
-                    break
-                G += CycleSpeed
-                DebugRGB(R , G , B)
-                SetDeviceColors(R , G , B)
-                time.sleep(0.002)
-                if G == 255:
-                    while 1 == 1:
-                        if RedoLoop == 1:
-                            break
-                        R -= CycleSpeed
-                        DebugRGB(R , G , B)
-                        SetDeviceColors(R , G , B)
-                        time.sleep(0.002)
-                        if R == 0:
-                            while 1 == 1:
-                                if RedoLoop == 1:
-                                    break
-                                B += CycleSpeed
-                                DebugRGB(R , G , B)
-                                SetDeviceColors(R , G , B)
-                                time.sleep(0.002)
-                                if B == 255:
-                                    while 1 == 1:
-                                        if RedoLoop == 1:
-                                            break
-                                        G -= CycleSpeed
-                                        DebugRGB(R , G , B)
-                                        SetDeviceColors(R , G , B)
-                                        time.sleep(0.002)
-                                        if G == 0:
-                                            while 1 == 1:
-                                                if RedoLoop == 1:
-                                                    break
-                                                R += CycleSpeed
-                                                DebugRGB(R , G , B)
-                                                SetDeviceColors(R , G , B)
-                                                time.sleep(0.002)
-                                                if R == 255:
-                                                    while 1 == 1:
-                                                        if RedoLoop == 1:
-                                                            break
-                                                        B -= CycleSpeed
-                                                        DebugRGB(R , G , B)
-                                                        SetDeviceColors(R , G , B)
-                                                        time.sleep(0.002)
-                                                        if B == 0:
-                                                            while 1 == 1:
-                                                                if RedoLoop == 1:
-                                                                    break
-                                                                G += CycleSpeed
-                                                                B += CycleSpeed
-                                                                DebugRGB(R , G , B)
-                                                                SetDeviceColors(R , G , B)
-                                                                time.sleep(0.002)
-                                                                if (str(R) + str(G) + str(B)) == "255255255":
-                                                                    while 1 == 1:
-                                                                        R -= CycleSpeed
-                                                                        G -= CycleSpeed
-                                                                        B -= CycleSpeed
-                                                                        DebugRGB(R , G , B)
-                                                                        SetDeviceColors(R , G , B)
-                                                                        time.sleep(0.002)
-                                                                        if B == 0:
-                                                                            RedoLoop = 1
-                                                                            break
+    while True:
+        #credit to @James Potkukelkka on discord for some of the code
+        hue_range = 1000 # Smaller = faster
+        iteration_delay = 0.01 # 10ms
+        for i in range(hue_range):
+            color = colorsys.hsv_to_rgb(i / hue_range, 1.0, 1.0)
 
-def CustomRainbow(speed=3):
-    
+            # Split RGB values
+            red = color[0] * 255
+            green = color[1] * 255
+            blue = color[2] * 255
+
+            for Device in Dlist:
+                Device.set_color(RGBColor(int(red),int(green),int(blue)))
+                time.sleep(iteration_delay)
+
+def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
+    for Device in Dlist:
+        time.sleep(0.3)
+        try:
+            Device.set_mode('static')
+        except:
+            Device.set_mode('direct')
+        finally:
+            print('error setting %s'%Device.name)
+            
     Offset = 1
     def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []
@@ -163,11 +109,11 @@ def CustomRainbow(speed=3):
     CBase = CB
 
     def wait():
-        time.sleep(float('0.0%d'%speed))
+        time.sleep(float('0.000%d'%speed))
     
     Zones = []
     num = 0
-    
+
     for device in Dlist:
         for zone in device.zones:
             Zones = Zones + [[zone]]
@@ -180,15 +126,15 @@ def CustomRainbow(speed=3):
     while True:
         wait()
         for Z in Zones:
-            CheckVal = len(Z) -1
+            #CheckVal = len(Z) -1
             for LED in Z[1:-1]:
-                Color = len(CBase)/CheckVal
+                Color = len(CBase)/MaxOffset
                 LEDColor = (int(Color)*LED[1][0])
                 if LEDColor >= len(CBase):
                     LEDColor = len(CBase) -1
                 CR , CB , CG = CBase[LEDColor]
                 LED[0][0].set_color(RGBColor(CR , CB , CG))
-                if LED[1][0] >= CheckVal:
+                if LED[1][0] >= MaxOffset:
                     LED[1][0] = 1
                 else:
                     LED[1][0] += 1
@@ -203,12 +149,12 @@ def FormGUI():
     OpenRGB_FX.title('OpenRGB FX')
 
     #------Device Frame---------
-    DLocations = tk.LabelFrame(None,width=300,height=300,bg='#3c423d')
-    RamZone = tk.Frame(master=DLocations,width=80,height=180)
-    DimmOne = tk.Frame(master=RamZone,width=20,height=180,padx=3)
-    DimmTwo = tk.Frame(master=RamZone,width=20,height=180,padx=3)
-    DimmThree = tk.Frame(master=RamZone,width=20,height=180,padx=3)
-    DimmFour = tk.Frame(master=RamZone,width=20,height=180,padx=3)
+    #DLocations = tk.LabelFrame(None,width=300,height=300,bg='#3c423d')
+    #RamZone = tk.Frame(master=DLocations,width=80,height=180)
+    #DimmOne = tk.Frame(master=RamZone,width=20,height=180,padx=3)
+    #DimmTwo = tk.Frame(master=RamZone,width=20,height=180,padx=3)
+    #DimmThree = tk.Frame(master=RamZone,width=20,height=180,padx=3)
+    #DimmFour = tk.Frame(master=RamZone,width=20,height=180,padx=3)
 
     #DimmOne.pack(side='left')
     #DimmTwo.pack(side='left')
@@ -303,4 +249,4 @@ def CRBhander(event):
     CRBProc.start()
     return
 
-FormGUI()
+CustomRainbow()
