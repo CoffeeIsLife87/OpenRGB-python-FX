@@ -10,20 +10,22 @@ def wait():
 
 def SetStatic():
     for Device in client.devices:
-        print(Device.name,Device.id)
         wait()
         try:
-            Device.set_mode('static')
-        except:
             Device.set_mode('direct')
-        finally:
-            pass
+            print('Set %s successfully'%Device.name)
+        except:
+            try:
+                Device.set_mode('static')
+                print('error setting %s\nfalling back to static'%Device.name)
+            except:
+                print("Critical error! couldn't set %s to static or direct"%Device.name)
 
-def CustomSpectrumCycle(CycleSpeed=3):#
+def CustomSpectrumCycle(CycleSpeed=1000):#
     SetStatic()
     while True:
-        #credit to @James Potkukelkka on discord for some of the code
-        hue_range = 1000 # Smaller = faster
+        #credit to @James Potkukelkka on discord for MOST of the code
+        hue_range = CycleSpeed # Smaller = faster
         iteration_delay = 0.01 # 10ms
         for i in range(hue_range):
             color = colorsys.hsv_to_rgb(i / hue_range, 1.0, 1.0)

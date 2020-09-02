@@ -6,14 +6,18 @@ client = openrgb.OpenRGBClient()
 Dlist = client.devices
 
 def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
+    
     for Device in Dlist:
         time.sleep(0.3)
         try:
-            Device.set_mode('static')
-        except:
             Device.set_mode('direct')
-        finally:
-            pass
+            print('Set %s successfully'%Device.name)
+        except:
+            try:
+                print('error setting %s\nfalling back to static'%Device.name)
+                Device.set_mode('static')
+            except:
+                print("Critical error! couldn't set %s to static or direct"%Device.name)
             
     Offset = 1
     def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
@@ -54,7 +58,7 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
     CBase = CB
 
     def wait():
-        time.sleep(float('0.000%d'%speed))
+        time.sleep(float('0.0000%d'%speed))
     
     Zones = []
     num = 0
@@ -62,17 +66,22 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
     for device in Dlist:
         for zone in device.zones:
             Zones = Zones + [[zone]]
-            Offset = 1
-            for led in zone.leds:
-                Zones[num] = Zones[num] + [[[led],[Offset]]]
-                Offset += 1
+            Offset = 2
+            if device.name == 'ASRock Polychrome V2':
+                for led in reversed(zone.leds):
+                    if len(zone.leds) == 1:
+                        Offset = 5
+                    Zones[num] = Zones[num] + [[[led],[Offset]]]
+                    Offset += 1
+            else:
+                for led in zone.leds:
+                    Zones[num] = Zones[num] + [[[led],[Offset]]]
+                    Offset += 1
             num += 1
-    
     while True:
         wait()
         for Z in Zones:
-            #CheckVal = len(Z) -1
-            for LED in Z[1:-1]:
+            for LED in Z[1:]:
                 Color = len(CBase)/MaxOffset
                 LEDColor = (int(Color)*LED[1][0])
                 if LEDColor >= len(CBase):
