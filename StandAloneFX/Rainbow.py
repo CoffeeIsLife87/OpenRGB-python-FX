@@ -1,5 +1,5 @@
 import openrgb , time , string , colorsys
-from openrgb.utils import RGBColor , ModeData
+from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
 
 client = openrgb.OpenRGBClient()
 
@@ -7,7 +7,7 @@ Dlist = client.devices
 
 def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
     
-    for Device in Dlist:
+    for Device in Dlist:# set to direct or static as a fallback
         time.sleep(0.3)
         try:
             Device.set_mode('direct')
@@ -67,23 +67,37 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
         for zone in device.zones:
             Zones = Zones + [[zone]]
             Offset = 2
-            if device.name == 'ASRock Polychrome V2':
+
+            if zone.type == ZoneType.ZONE_TYPE_MATRIX:
+                for SubZone in zone.matrix_map:
+                    for led in SubZone:
+                        if led != None:
+                            Zones[num] = Zones[num] + [[[device.leds[led]], [Offset]]]
+
+                    Offset += 1
+            elif device.name == 'ASRock Polychrome V2':
                 for led in reversed(zone.leds):
                     if len(zone.leds) == 1:
                         Offset = 5
                     Zones[num] = Zones[num] + [[[led],[Offset]]]
                     Offset += 1
+                    
             else:
                 for led in zone.leds:
                     Zones[num] = Zones[num] + [[[led],[Offset]]]
                     Offset += 1
             num += 1
+
     while True:
         wait()
         for Z in Zones:
             for LED in Z[1:]:
                 Color = len(CBase)/MaxOffset
-                LEDColor = (int(Color)*LED[1][0])
+                try:
+                    LEDColor = (int(Color)*LED[1][0])
+                except:
+                    print(LED)
+                    exit()
                 if LEDColor >= len(CBase):
                     LEDColor = len(CBase) -1
                 CR , CB , CG = CBase[LEDColor]
