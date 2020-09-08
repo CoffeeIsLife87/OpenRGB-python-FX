@@ -58,7 +58,7 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
     CBase = CB
 
     def wait():
-        time.sleep(float('0.0000%d'%speed))
+        time.sleep(float('0.0%d'%speed))
     
     Zones = []
     num = 0
