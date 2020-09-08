@@ -7,7 +7,7 @@ Dlist = client.devices
 C1 = [0,255,0]
 C2 = [0,0,255]
 
-def OneValPerCode()
+#def OneValPerCode()
 
 def MakeCbase(StartColor , EndColor):
     goal = EndColor
