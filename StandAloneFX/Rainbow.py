@@ -22,9 +22,10 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
     Offset = 1
     def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []
-        R = G = B = 0
+        R = 240
+        G = B = 0
         while 1 == 1:
-            R += CycleSpeed
+            R += 3
             CBase = CBase + [(R,G,B)]
             if R == 255:
                 while 1 == 1:
@@ -50,7 +51,6 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
                                                         while 1 == 1:
                                                             B -= CycleSpeed
                                                             CBase = CBase + [(R,G,B)]
-                                                            #print(CBase)
                                                             if B == 0:
                                                                 return CBase
     CB = P1()
