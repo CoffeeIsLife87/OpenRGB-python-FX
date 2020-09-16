@@ -68,7 +68,7 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
             Zones = Zones + [[zone]]
             Offset = 2
 
-            if zone.type == ZoneType.ZONE_TYPE_MATRIX:
+            if zone.type == ZoneType.MATRIX:
                 for SubZone in zone.matrix_map:
                     for led in SubZone:
                         if led != None:
