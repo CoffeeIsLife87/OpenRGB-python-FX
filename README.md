@@ -1,14 +1,41 @@
 # OpenRGB-python-FX
 
-I made a thing :)
+## Effect List
 
-Has system wide* color cycling as well as system wide* rainbow 
-###### system wide is only for openRGB supported devices
+* Rainbow wave
 
-feel free to add effects and make PR's
+* Spectrum cycling
+
+* Gradient cycling
+
+## Usage
+
+* start the openRGB sdk server, otherwise this *will not work*
+
+* clone the repository or download the effect you want
+
+* run using ```python3 file.py``` or ```python file.py```
+
+* enjoy the effect :)
 
 ## Writing effects
 
-If you are going to write an effect, please do it as a function
+Effects are stored in their own .py file for now
 
-Said function must start with ``` custom ``` followed by what you want to call it
+```
+import openrgb , time , string , colorsys , sys
+from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
+
+client = openrgb.OpenRGBClient()
+
+Dlist = client.devices
+```
+is a good starting point
+
+## Notes
+
+While this is system wide, there are some limitations.
+
+if the device isn't in openRGB then the effect *will not* apply to it
+
+currently rainbow is poorly optimized due to a python sdk binding issue so it might be a bit jarring
