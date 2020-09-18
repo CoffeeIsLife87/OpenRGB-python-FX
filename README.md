@@ -12,6 +12,8 @@
 
 * start the openRGB sdk server, otherwise this *will not work*
 
+* you may need to install the sdk binding ``` pip install openrgb-python``` or ```pip3 install openrgb-python``` (you may need to add --user at the end for linux)
+
 * clone the repository or download the effect you want
 
 * run using ```python3 file.py``` or ```python file.py```
