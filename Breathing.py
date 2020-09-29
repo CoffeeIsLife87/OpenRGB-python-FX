@@ -5,7 +5,7 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
-def CreateCBase(C = (0,25,255)):
+def CreateCBase(C = (0,255,255)):
     RunThrough = 0 # determines the amount of passes made
     DevideBase = 0 # the highest value of C (RGB color code)
     BaseC = C #to preserve C for use later (mostly for devision)
@@ -29,7 +29,10 @@ def CreateCBase(C = (0,25,255)):
         CBase = CBase + [C]
     return CBase
 
-CB = CreateCBase()
+if len(sys.argv) == 4:
+    CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
+else:
+    CB = CreateCBase()
 
 def FBounce(ColorWall):
     for color in ColorWall:
