@@ -113,7 +113,7 @@ def GradCycle(MaxOffset=15,speed=3,C1=(0,255,255),C2=(120,0,255)):
             Zones = Zones + [[zone]]
             Offset = 2
 
-            if zone.type == ZoneType.ZONE_TYPE_MATRIX:
+            if zone.type == ZoneType.MATRIX:
                 for SubZone in zone.matrix_map:
                     for led in SubZone:
                         if led != None:
