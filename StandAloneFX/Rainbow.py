@@ -100,11 +100,11 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
                     exit()
                 if LEDColor >= len(CBase):
                     LEDColor = len(CBase) -1
-                CR , CB , CG = CBase[LEDColor]
-                LED[0][0].set_color(RGBColor(CR , CB , CG))
+                CR , CG , CB = CBase[LEDColor]
+                LED[0][0].set_color(RGBColor(CR , CG , CB))
                 if LED[1][0] >= MaxOffset:
                     LED[1][0] = 1
                 else:
                     LED[1][0] += 1
-
+                    
 CustomRainbow()
