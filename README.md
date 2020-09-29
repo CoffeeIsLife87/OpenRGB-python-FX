@@ -30,19 +30,18 @@ To use custom colors you must have 3(for breathing) or 6(for gradcycle) numbers 
 
 something like ```python(3) gradcycle.py 0 255 255 255 30 0``` or ```python(3) breathing.py 0 255 90```
 
-
 ## Writing effects
 
 Effects are stored in their own .py file for now
 
-```
-import openrgb , time , string , colorsys , sys
+```import openrgb , time , string , colorsys , sys
 from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
 
 client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 ```
+
 is a good starting point
 
 ## Notes
