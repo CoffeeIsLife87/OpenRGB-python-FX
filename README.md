@@ -8,17 +8,28 @@
 
 * Gradient cycling
 
+* Breathing
+
 ## Usage
 
 * start the openRGB sdk server, otherwise this *will not work*
 
-* you may need to install the sdk binding ``` pip install openrgb-python``` or ```pip3 install openrgb-python``` (you may need to add --user at the end for linux)
+* you may need to install the sdk binding ```pip install openrgb-python``` or ```pip3 install openrgb-python``` (you may also need to add --user at the end for linux)
 
 * clone the repository or download the effect you want
 
 * run using ```python3 file.py``` or ```python file.py```
 
 * enjoy the effect :)
+
+### usage note
+
+Some effects support custom colors (gradcycle and breathing)
+
+To use custom colors you must have 3(for breathing) or 6(for gradcycle) numbers ranging 0 to 255
+
+something like ```python(3) gradcycle.py 0 255 255 255 30 0``` or ```python(3) breathing.py 0 255 90```
+
 
 ## Writing effects
 
