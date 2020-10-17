@@ -5,6 +5,20 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
+def SetStatic():
+    for Device in client.devices:
+        time.sleep(0.1)
+        try:
+            Device.set_mode('direct')
+            print('Set %s successfully'%Device.name)
+        except:
+            try:
+                Device.set_mode('static')
+                print('error setting %s\nfalling back to static'%Device.name)
+            except:
+                print("Critical error! couldn't set %s to static or direct"%Device.name)
+SetStatic()
+
 def CreateCBase(C = (0,255,255)):
     RunThrough = 0 # determines the amount of passes made
     DevideBase = 0 # the highest value of C (RGB color code)

@@ -5,6 +5,21 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
+def SetStatic():
+    for Device in client.devices:
+        time.sleep(0.1)
+        try:
+            Device.set_mode('direct')
+            print('Set %s successfully'%Device.name)
+        except:
+            try:
+                Device.set_mode('static')
+                print('error setting %s\nfalling back to static'%Device.name)
+            except:
+                print("Critical error! couldn't set %s to static or direct"%Device.name)
+SetStatic()
+
+
 def MakeCBase(StartingColor=None,EndingColor=None):
     def hex_to_RGB(hex):
       ''' "#FFFFFF" -> [255,255,255] '''

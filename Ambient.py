@@ -14,23 +14,28 @@ DURATION       = 3    # how long it takes bulb to switch colours (in seconds)
 DECIMATE       = 10   # skip every DECIMATE number of pixels to speed up calculation
 
 
-cli = OpenRGBClient() #will only work if you use default ip/port for OpenRGB server. This is an easy fix, read the documentation if need be https://openrgb-python.readthedocs.io/en/latest/
+client = OpenRGBClient() #will only work if you use default ip/port for OpenRGB server. This is an easy fix, read the documentation if need be https://openrgb-python.readthedocs.io/en/latest/
 
-Dlist = cli.devices
+Dlist = client.devices
  
-for device in Dlist:
-    try:
-        device.set_mode('direct')
-    except:
-        device.set_mode('static')
-        print("%s doesn't have direct mode. falling back to static"%device.name)
-    time.sleep(0.001)
+def SetStatic():
+    for Device in client.devices:
+        time.sleep(0.1)
+        try:
+            Device.set_mode('direct')
+            print('Set %s successfully'%Device.name)
+        except:
+            try:
+                Device.set_mode('static')
+                print('error setting %s\nfalling back to static'%Device.name)
+            except:
+                print("Critical error! couldn't set %s to static or direct"%Device.name)
+SetStatic()
 
 def hex_to_rgb(value):
     value = value.lstrip('#')
     lv = len(value)
     return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
- 
  
 # run loop
 while True:

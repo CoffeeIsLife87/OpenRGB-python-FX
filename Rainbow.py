@@ -5,20 +5,22 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
-def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
-    
-    for Device in Dlist:# set to direct or static as a fallback
-        time.sleep(0.3)
+def SetStatic():
+    for Device in client.devices:
+        time.sleep(0.1)
         try:
             Device.set_mode('direct')
             print('Set %s successfully'%Device.name)
         except:
             try:
-                print('error setting %s\nfalling back to static'%Device.name)
                 Device.set_mode('static')
+                print('error setting %s\nfalling back to static'%Device.name)
             except:
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
-            
+SetStatic()
+
+def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
+    
     Offset = 1
     def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []

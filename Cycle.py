@@ -10,7 +10,7 @@ def wait():
 
 def SetStatic():
     for Device in client.devices:
-        wait()
+        time.sleep(0.1)
         try:
             Device.set_mode('direct')
             print('Set %s successfully'%Device.name)
@@ -20,6 +20,7 @@ def SetStatic():
                 print('error setting %s\nfalling back to static'%Device.name)
             except:
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
+SetStatic()
 
 def CustomSpectrumCycle(CycleSpeed=1000):#
     SetStatic()
