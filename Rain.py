@@ -1,106 +1,117 @@
-import openrgb , time , string , colorsys , sys , threading , random
-from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
+# As of now all the code in this file is by bahorn with some minor modifications (moving stuff) by me
+import colorsys, random, string, sys, multiprocessing, time, os, openrgb
+from openrgb.utils import DeviceType, ModeData, RGBColor, ZoneType
 
-client = openrgb.OpenRGBClient()
+Red = RGBColor(255, 0, 0)
+Black = RGBColor(0, 0, 0)
 
-Dlist = client.devices
 
-#print(random.randint(1,2))
+class SurfaceRain:
+    """
+    Connects to an OpenRGB device and displays a rain effect.
+    """
+    def __init__(self, device_name, surface_index):
+        self.device = None
+        client = openrgb.OpenRGBClient()
+        for device in client.devices:
+            if device.name == device_name:
+                self.device = device
+        if not self.device:
+            raise Exception("device not found")
 
-#exit()
-def SetStatic():
-    for Device in client.devices:
-        time.sleep(0.1)
+        self.surface = self.device.zones[surface_index]
+        if self.surface.type != ZoneType.LINEAR:
+            raise Exception("not a linear zone")
+
+
+        self.surface.leds.reverse()
+        self.leds = self.surface.leds
+        self.set_mode()
+
+    def set_mode(self):
+        """
+        Set in a direct / static mode.
+        """
         try:
-            Device.set_mode('direct')
-            print('Set %s successfully'%Device.name)
+            self.device.set_mode('direct')
         except:
             try:
-                Device.set_mode('static')
-                print('error setting %s\nfalling back to static'%Device.name)
+                self.device.set_mode('static')
+                print("error setting %s\nfalling back to static" %self.device.name)
             except:
-                print("Critical error! couldn't set %s to static or direct"%Device.name)
-SetStatic()
+                print("Critical error! couldn't set %s to static or direct" %self.device.name)
+        self.device.set_color(Black)
 
-#Color = RGBColor(0,127,255)
-Red = RGBColor(255,0,0)
-Black = RGBColor(0,0,0)
+    @staticmethod
+    def transformer(state):
+        """
+        Apply the rain transformation to this `state`
+        """
+        transformed = []
 
-def MakeSurfaceList():
-    SurfaceList = []
-    for D in Dlist:
-        for Z in D.zones:
-            if Z.type == ZoneType.LINEAR:
-                SurfaceList = SurfaceList + [Z]
-    return SurfaceList # Rain is really hard to do on single or matrix maps so I will stick to linear for now. I may add matrix support for keyboards but that will be for the future
+        # Basically, defining this as a cellular automata
+        # This is really just the Projection function:
+        # https://en.wikipedia.org/wiki/Projection_(set_theory)
+        truth_table = {
+            (False, False): False,
+            (False, True):  False,
+            (True, False):  True,
+            (True, True):   True,
+        }
+        for i in range(0, len(state)):
+            if i == 0:
+                # Mutation goes here
+                x = random.randint(0, len(state)*10) == 0
+                if state[0] and not state[1]:
+                    x = True
+            else:
+                x = state[i-1]
+            y = state[i]
+            transformed.append(truth_table[(x, y)])
+        return transformed
 
-def AddOffsets(SL):
-    LedOffsetMap = []
-    for S in SL:
-        ZoneMap = []
-        LEDOffset = len(S.leds)
-        for led in S.leds:
-            ZoneMap = ZoneMap + [[led , LEDOffset]]
-            LEDOffset -= 1
-        LedOffsetMap = LedOffsetMap + [ZoneMap]
-    return LedOffsetMap
-
-def MakeDRain(PreserveMap):
-    LOffsetMap = PreserveMap
-    try:
+    def start(self, refresh=8):
+        """
+        Start the effect on this surface.
+        """
+        state = [False for _ in self.leds]
+        prev_state = state
         while True:
-            for Sub in LOffsetMap:
-                for Check in Sub:
-                    if (Check[1] == 1) or (Check[1] == 2):
-                        Check[0].set_color(Red)
-                        if Check[1] == -1:
-                            pass
-                        else:
-                            Check[1] -= 1
-                    else:
-                        Check[0].set_color(Black)
-                        if Check[1] == -1:
-                            pass
-                        else:
-                            Check[1] -= 1
-                    time.sleep(0.01)
-            if LedOffsetMap[0][0][1] == -1:
-                break
-    except:
-        while True:
-            for Check in LOffsetMap:
-                if (Check[1] == 1) or (Check[1] == 2):
-                    Check[0].set_color(Red)
-                    if Check[1] == -1:
-                        pass
-                    else:
-                        Check[1] -= 1
-                else:
-                    Check[0].set_color(Black)
-                    if Check[1] == -1:
-                        pass
-                    else:
-                        Check[1] -= 1
-                time.sleep(0.01)
-            if LedOffsetMap[0][0][1] == -1:
-                break
-    return
+            for i, value in enumerate(state):
+                try:
+                    if prev_state[i] != value:
+                        # smooth it out
+                        self.leds[i].set_color(
+                            {
+                                True: Red,
+                                False: Black
+                            }[value]
+                        )
+                except ValueError:
+                    return
 
-def EnsureRandom(LOM):
-    NoDupes = []
-    Num = 1
-    for i in LOM:
-        T = threading.Thread(group=None,name=Num,target=MakeDRain(i),daemon=True)
-        NoDupes = NoDupes + [[T,Num]]
-        Num += 1
-    while True:
-        time.sleep(1)
-        print("loop")
-        for I in NoDupes:
-            if random.randint(1,2) == 1:
-                pass
+            prev_state = state.copy()
+            state = SurfaceRain.transformer(state)
+            time.sleep(1.0/refresh)
 
-Slist = MakeSurfaceList()
-LedOffsetMap = (AddOffsets(Slist))
-EnsureRandom(LedOffsetMap)
-#MakeDRain(LedOffsetMap)
+def setup_rain(device_name, surface_idx):
+    """
+    Creates and instance of the SurfaceRain object and starts it.
+    Used by threads to provide a nice interface to do this.
+    """
+    inst = SurfaceRain(device_name, surface_idx)
+    inst.start()
+
+if __name__ == "__main__":
+    # Get a list of surfaces
+    client = openrgb.OpenRGBClient()
+    surfaces = []
+    for device in client.devices:
+        for idx, zone in enumerate(device.zones):
+            if zone.type == ZoneType.LINEAR:
+                surfaces.append((device.name, idx))
+    del client
+
+    for surface in surfaces:
+        t = multiprocessing.Process(target=setup_rain, args=surface)
+        t.start()

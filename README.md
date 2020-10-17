@@ -12,9 +12,9 @@
 
 * Ambient (credit to usrErr0r on discord for this one)
 
-* Rain (*NOT DONE*, need to figure out paralellization so I can make the drops desync)
+* Rain (**Massive** thanks and credit to Bahorn on discord for this one, still somewhat WIP (need to add color selection) but function with red/black)
 
-* Slice (*NOT DONE* mostly a clone of rain but synced)
+* Slice (*NOT DONE*)
 
 ## Usage
 
