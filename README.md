@@ -12,7 +12,7 @@
 
 * Ambient (credit to usrErr0r on discord for this one)
 
-* Rain (**Massive** thanks and credit to Bahorn on discord for this one, still somewhat WIP (need to add color selection) but function with red/black)
+* Rain (**Massive** thanks and credit to Bahorn on discord for this one)
 
 * Slice (*NOT DONE*)
 
@@ -30,7 +30,7 @@
 
 ### usage note
 
-* Some effects support custom colors (gradcycle and breathing)
+* Some effects support custom colors (gradcycle, breathing, and rain)
 
   * To use custom colors you must have 3(for breathing) or 6(for gradcycle) numbers ranging 0 to 255
 

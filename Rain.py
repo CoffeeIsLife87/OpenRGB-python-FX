@@ -2,22 +2,22 @@
 import colorsys, random, string, sys, multiprocessing, time, os, openrgb
 from openrgb.utils import DeviceType, ModeData, RGBColor, ZoneType
 
-Red = RGBColor(255, 0, 0)
 Black = RGBColor(0, 0, 0)
 
+# Check for user selected color
+if len(sys.argv) == 4:
+    Color = RGBColor(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+else:
+    Color = RGBColor(255,0,0)
 
 class SurfaceRain:
     """
     Connects to an OpenRGB device and displays a rain effect.
     """
-    def __init__(self, device_name, surface_index):
+    def __init__(self, device_index, surface_index):
         self.device = None
         client = openrgb.OpenRGBClient()
-        for device in client.devices:
-            if device.name == device_name:
-                self.device = device
-        if not self.device:
-            raise Exception("device not found")
+        self.device = client.devices[device_index]
 
         self.surface = self.device.zones[surface_index]
         if self.surface.type != ZoneType.LINEAR:
@@ -37,40 +37,33 @@ class SurfaceRain:
         except:
             try:
                 self.device.set_mode('static')
-                print("error setting %s\nfalling back to static" %self.device.name)
+                print("error setting %s\nfalling back to static" %
+                      self.device.name)
             except:
-                print("Critical error! couldn't set %s to static or direct" %self.device.name)
+                print(
+                    "Critical error! couldn't set %s to static or direct" %
+                    self.device.name)
         self.device.set_color(Black)
 
     @staticmethod
-    def transformer(state):
+    def transformer(state, ratio):
         """
         Apply the rain transformation to this `state`
         """
         transformed = []
 
-        # Basically, defining this as a cellular automata
-        # This is really just the Projection function:
-        # https://en.wikipedia.org/wiki/Projection_(set_theory)
-        truth_table = {
-            (False, False): False,
-            (False, True):  False,
-            (True, False):  True,
-            (True, True):   True,
-        }
         for i in range(0, len(state)):
             if i == 0:
                 # Mutation goes here
-                x = random.randint(0, len(state)*10) == 0
+                x = random.randint(0, len(state)*ratio) == 0
                 if state[0] and not state[1]:
                     x = True
             else:
                 x = state[i-1]
-            y = state[i]
-            transformed.append(truth_table[(x, y)])
+            transformed.append(x)
         return transformed
 
-    def start(self, refresh=8):
+    def start(self, refresh=30, ratio=10):
         """
         Start the effect on this surface.
         """
@@ -83,7 +76,7 @@ class SurfaceRain:
                         # smooth it out
                         self.leds[i].set_color(
                             {
-                                True: Red,
+                                True: Color,
                                 False: Black
                             }[value]
                         )
@@ -91,27 +84,26 @@ class SurfaceRain:
                     return
 
             prev_state = state.copy()
-            state = SurfaceRain.transformer(state)
+            state = SurfaceRain.transformer(state, ratio)
             time.sleep(1.0/refresh)
 
-def setup_rain(device_name, surface_idx):
+def setup_rain(device_idx, surface_idx):
     """
     Creates and instance of the SurfaceRain object and starts it.
     Used by threads to provide a nice interface to do this.
     """
-    inst = SurfaceRain(device_name, surface_idx)
-    inst.start()
+    inst = SurfaceRain(device_idx, surface_idx)
+    inst.start(ratio=10)
 
 if __name__ == "__main__":
     # Get a list of surfaces
     client = openrgb.OpenRGBClient()
     surfaces = []
-    for device in client.devices:
-        for idx, zone in enumerate(device.zones):
+    for device_idx, device in enumerate(client.devices):
+        for zone_idx, zone in enumerate(device.zones):
             if zone.type == ZoneType.LINEAR:
-                surfaces.append((device.name, idx))
+                surfaces.append((device_idx, zone_idx))
     del client
-
     for surface in surfaces:
         t = multiprocessing.Process(target=setup_rain, args=surface)
         t.start()
