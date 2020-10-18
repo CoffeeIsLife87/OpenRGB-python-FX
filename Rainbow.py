@@ -19,10 +19,9 @@ def SetStatic():
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 SetStatic()
 
-def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
-    
-    Offset = 1
-    def P1(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
+def CustomRainbow(MaxOffset=30): #Higher Offset = slower
+
+    def CreateColorBase(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []
         R = 240
         G = B = 0
@@ -55,58 +54,35 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
                                                             CBase = CBase + [(R,G,B)]
                                                             if B == 0:
                                                                 return CBase
-    CB = P1()
+    CB = CreateColorBase()
 
     CBase = CB
 
-    def wait():
-        time.sleep(float('0.0%d'%speed))
+    def wait(): # just usefull to have
+        time.sleep(0.01) # does anyone know if calling functions like this adds more time?
     
-    Zones = []
-    num = 0
-
-    for device in Dlist:
-        for zone in device.zones:
-            Zones = Zones + [[zone]]
-            Offset = 2
-
-            if zone.type == ZoneType.MATRIX:
-                for SubZone in zone.matrix_map:
-                    for led in SubZone:
-                        if led != None:
-                            Zones[num] = Zones[num] + [[[device.leds[led]], [Offset]]]
-
-                    Offset += 1
-            elif device.name == 'ASRock Polychrome V2':
-                for led in reversed(zone.leds):
-                    if len(zone.leds) == 1:
-                        Offset = 5
-                    Zones[num] = Zones[num] + [[[led],[Offset]]]
-                    Offset += 1
-                    
-            else:
-                for led in zone.leds:
-                    Zones[num] = Zones[num] + [[[led],[Offset]]]
-                    Offset += 1
-            num += 1
-
-    while True:
-        wait()
-        for Z in Zones:
-            for LED in Z[1:]:
-                Color = len(CBase)/MaxOffset
-                try:
-                    LEDColor = (int(Color)*LED[1][0])
-                except:
-                    print(LED)
-                    exit()
-                if LEDColor >= len(CBase):
-                    LEDColor = len(CBase) -1
-                CR , CG , CB = CBase[LEDColor]
-                LED[0][0].set_color(RGBColor(CR , CG , CB))
-                if LED[1][0] >= MaxOffset:
-                    LED[1][0] = 1
+    ZoneOffsets = []
+    for Device in Dlist:
+        for zone in Device.zones:
+            LEDAmmount = len(zone.leds) # the ammount of leds in a zone
+            ZoneOffsets = ZoneOffsets + [[zone, [i for i in range(1, (LEDAmmount + 1)) ], LEDAmmount ]] #setup the zone and add an offset tracker
+    
+    Color = len(CBase)/MaxOffset # for some reason I put that in the while loop even tho MaxOffset never changes smh
+    while True: # Run infinitely
+        for ZO in ZoneOffsets: # Grab a zone created earlier
+            for color in ZO[0].colors: # enumerate through the color entries in the zone object
+                ID = ZO[0].colors.index(color) # grab the current item index for use later (I figured this was more effective than grabbing it a lot later)
+                FinalColor = Color*ZO[1][ID] # get the color to put on the LED
+                if FinalColor >= len(CBase): # make sure that it isn't out of bounds
+                    FinalColor = len(CBase) - 1
+                CR, CG, CB = CBase[int(FinalColor)]# devide it for the RGBColor module (it is really picky)
+                ZO[0].colors[ID] = RGBColor(CR, CG, CB) # Tell the zone to set that LED to the color
+                if ZO[1][ID] >= MaxOffset: # check to make sure that the offset isn't out of bounds
+                    ZO[1][ID] = 1
                 else:
-                    LED[1][0] += 1
-                    
-CustomRainbow()
+                    ZO[1][ID] += 1 # make the offset go up one
+            ZO[0].show() # paint all the LEDs set in the zone
+        #wait() # sleep so the controller can cool down
+
+CustomRainbow() # not sure why I wrote all this as a function '_'
+# I suppose if I every merge it all into one file then it might help

@@ -16,6 +16,8 @@
 
 * Slice (*NOT DONE*)
 
+* Cram
+
 ## Usage
 
 * start the openRGB sdk server, otherwise this *will not work*
@@ -61,6 +63,6 @@ While this is system wide, there are some limitations.
 
 if the device isn't in openRGB then the effect *will not* apply to it
 
-currently rainbow is poorly optimized due to a python sdk binding issue so it might be a bit jarring
+currently rainbow is poorly optimized due to a lack of big brainedness on my part (I did do some optimizations that allows me to use .show() and that made it more elidgable to other people)
 
 Ambient grabs the entire screen leading to some shade of white or black. hopefully this will get fixed soon
