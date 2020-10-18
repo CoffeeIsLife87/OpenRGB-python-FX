@@ -24,6 +24,8 @@
 
 * clone the repository or download the effect you want
 
+* cd into the folder with the python files
+
 * run using ```python3 file.py``` or ```python file.py```
 
 * enjoy the effect :)

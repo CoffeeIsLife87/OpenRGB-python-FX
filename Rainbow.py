@@ -58,9 +58,6 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
 
     CBase = CB
 
-    def wait(): # just usefull to have
-        time.sleep(0.01) # does anyone know if calling functions like this adds more time?
-    
     ZoneOffsets = []
     for Device in Dlist:
         for zone in Device.zones:
@@ -82,7 +79,7 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
                 else:
                     ZO[1][ID] += 1 # make the offset go up one
             ZO[0].show() # paint all the LEDs set in the zone
-        wait() # sleep so the controller can cool down
+        time.sleep(0.1) # sleep so the controller can cool down
 
 CustomRainbow() # not sure why I wrote all this as a function '_'
 # I suppose if I every merge it all into one file then it might help
