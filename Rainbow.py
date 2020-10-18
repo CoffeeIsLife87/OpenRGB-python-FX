@@ -82,7 +82,7 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
                 else:
                     ZO[1][ID] += 1 # make the offset go up one
             ZO[0].show() # paint all the LEDs set in the zone
-        #wait() # sleep so the controller can cool down
+        wait() # sleep so the controller can cool down
 
 CustomRainbow() # not sure why I wrote all this as a function '_'
 # I suppose if I every merge it all into one file then it might help
