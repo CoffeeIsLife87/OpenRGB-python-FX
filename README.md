@@ -14,8 +14,6 @@
 
 * Rain (**Massive** thanks and credit to Bahorn on discord for this one)
 
-* Slice (*NOT DONE*)
-
 * Cram
 
 ## Usage
