@@ -26,31 +26,31 @@ def CustomRainbow(speed=1,MaxOffset=30): #Higher = slower
         CBase = []
         R = 240
         G = B = 0
-        while 1 == 1:
+        while True:
             R += 3
             CBase = CBase + [(R,G,B)]
             if R == 255:
-                while 1 == 1:
+                while True:
                     G += CycleSpeed
                     CBase = CBase + [(R,G,B)]
                     if G == 255:
-                        while 1 == 1:
+                        while True:
                             R -= CycleSpeed
                             CBase = CBase + [(R,G,B)]
                             if R == 0:
-                                while 1 == 1:
+                                while True:
                                     B += CycleSpeed
                                     CBase = CBase + [(R,G,B)]
                                     if B == 255:
-                                        while 1 == 1:
+                                        while True:
                                             G -= CycleSpeed
                                             CBase = CBase + [(R,G,B)]
                                             if G == 0:
-                                                while 1 == 1:
+                                                while True:
                                                     R += CycleSpeed
                                                     CBase = CBase + [(R,G,B)]
                                                     if R == 255:
-                                                        while 1 == 1:
+                                                        while True:
                                                             B -= CycleSpeed
                                                             CBase = CBase + [(R,G,B)]
                                                             if B == 0:

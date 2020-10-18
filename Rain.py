@@ -8,7 +8,7 @@ Black = RGBColor(0, 0, 0)
 if len(sys.argv) == 4:
     Color = RGBColor(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
 else:
-    Color = RGBColor(255,0,0)
+    Color = RGBColor(255,255,255) # defaults to white
 
 class SurfaceRain:
     """
