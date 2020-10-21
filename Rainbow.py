@@ -1,4 +1,4 @@
-import openrgb , time , string , colorsys
+import openrgb , time , string , colorsys, sys
 from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
 
 client = openrgb.OpenRGBClient()
@@ -54,9 +54,39 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
                                                             CBase = CBase + [(R,G,B)]
                                                             if B == 0:
                                                                 return CBase
-    CB = CreateColorBase()
 
-    CBase = CB
+    def GrabColorOrSpeedOrBoth(Enable=3):
+        """Another function for easy copy and pasting\n
+        CreateCbase has to be defined for this to work or you have to modify it\n
+        You can also enable or disable certain parts (1 is only enable color, 2 is only speed, 3 is both enabled)"""
+        if (Enable == 1) or (Enable == 3):
+            if (len(sys.argv) == 4):
+                #CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
+                FastGoBRR = 15
+                print('user defined color')
+    
+        if (Enable == 2) or (Enable == 3):
+            if len(sys.argv) == 2:
+                CB = CreateColorBase()
+                FastGoBRR = int(sys.argv[1])
+                #print('user defined speed')
+                #if len(CB)%FastGoBRR != 0:
+                #    print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
+                #    FastGoBRR = 15
+        
+        if (Enable == 3):
+            if len(sys.argv) == 5:
+                CB = CreateColorBase()
+                FastGoBRR = int(sys.argv[1])
+                #print('user defined both')
+        
+        else:
+            CB = CreateColorBase()
+            FastGoBRR = 15
+            #print('nothing is user defined')
+        return CB, FastGoBRR
+
+    CBase, MaxOffset = GrabColorOrSpeedOrBoth(2)
 
     ZoneOffsets = []
     for Device in Dlist:
@@ -64,7 +94,7 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
             LEDAmmount = len(zone.leds) # the ammount of leds in a zone
             ZoneOffsets = ZoneOffsets + [[zone, [i for i in range(1, (LEDAmmount + 1)) ], LEDAmmount ]] #setup the zone and add an offset tracker
     
-    Color = len(CBase)/MaxOffset # for some reason I put that in the while loop even tho MaxOffset never changes smh
+    Color = len(CBase)/MaxOffset # MaxOffset changes now but for some numbers it is buggy but I am too lazy to figure out why so it defaults to 30 (which isn't buggy)
     while True: # Run infinitely
         for ZO in ZoneOffsets: # Grab a zone created earlier
             for color in ZO[0].colors: # enumerate through the color entries in the zone object

@@ -2,9 +2,9 @@
 
 ## Effect List
 
-* Rainbow wave
+* Rainbow wave (now speed controllable but is buggy for some speeds)
 
-* Spectrum cycling
+* Spectrum cycling (Credit to James Potkukelkka on discord for this one)
 
 * Gradient cycling
 
@@ -41,6 +41,8 @@
 * Ambient requires some special python modules
 
   * ```pip install pillow colour``` or ```pip3 install pillow colour``` (again, you may also need to add ```--user``` to the end for it to work)
+
+* For effects that have custom speeds, the speed comes before the color (``python Breathing 5(speed) 255 0 0(color)``)
 
 ## Writing effects
 
