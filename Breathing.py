@@ -52,31 +52,32 @@ def GrabColorOrSpeedOrBoth(Enable=3):
     """Another function for easy copy and pasting\n
     CreateCbase has to be defined for this to work or you have to modify it\n
     You can also enable or disable certain parts (1 is only enable color, 2 is only speed, 3 is both enabled)"""
-    if (Enable == 1) or (Enable == 3):
-        if (len(sys.argv) == 4):
-            CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
-            FastGoBRR = 15
-            print('user defined color')
-
-    if (Enable == 2) or (Enable == 3):
-        if len(sys.argv) == 2:
-            CB = CreateCBase()
-            FastGoBRR = int(sys.argv[1])
-            #print('user defined speed')
-            if len(CB)%FastGoBRR != 0:
-                print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
+    if len(sys.argv) > 1:
+        if (Enable == 1) or (Enable == 3):
+            if (len(sys.argv) == 4):
+                CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
                 FastGoBRR = 15
+                print('user defined color')
+
+        if (Enable == 2) or (Enable == 3):
+            if len(sys.argv) == 2:
+                CB = CreateCBase()
+                FastGoBRR = int(sys.argv[1])
+                print('user defined speed')
+                if len(CB)%FastGoBRR != 0:
+                    print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
+                    FastGoBRR = 15
     
-    if (Enable == 3):
-        if len(sys.argv) == 5:
-            CB = CreateCBase(C=(int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4])))
-            FastGoBRR = int(sys.argv[1])
-            #print('user defined both')
+        if (Enable == 3):
+            if len(sys.argv) == 5:
+                CB = CreateCBase(C=(int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4])))
+                FastGoBRR = int(sys.argv[1])
+                print('user defined both')
     
     else:
         CB = CreateCBase()
         FastGoBRR = 15
-        #print('nothing is user defined')
+        print('nothing is user defined')
     return CB, FastGoBRR
 
 def FBounce(ColorWall,Speed): # makes the lights get brighter
