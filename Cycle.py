@@ -22,7 +22,7 @@ def SetStatic():
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 SetStatic()
 
-def CustomSpectrumCycle(CycleSpeed=1000):#
+def CustomSpectrumCycle(CycleSpeed=1000):
     SetStatic()
     while True:
         #credit to @James Potkukelkka on discord for MOST of the code

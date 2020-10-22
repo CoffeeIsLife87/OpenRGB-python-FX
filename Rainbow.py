@@ -70,9 +70,6 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
                 CB = CreateColorBase()
                 FastGoBRR = int(sys.argv[1])
                 #print('user defined speed')
-                #if len(CB)%FastGoBRR != 0:
-                #    print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
-                #    FastGoBRR = 15
         
         if (Enable == 3):
             if len(sys.argv) == 5:

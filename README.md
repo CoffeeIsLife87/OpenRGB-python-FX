@@ -10,7 +10,7 @@
 
 * Breathing
 
-* Ambient (credit to usrErr0r on discord for this one)
+* Ambient (credit to usrErr0r on discord for this one, Not working on linux due to ImageGrab not having an import)
 
 * Rain (**Massive** thanks and credit to Bahorn on discord for this one)
 
