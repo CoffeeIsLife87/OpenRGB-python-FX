@@ -82,7 +82,7 @@ def MakeCBase(StartingColor=None,EndingColor=None):
 
       return gradient_dict
 
-    Grad = polylinear_gradient((RGB_to_hex(StartingColor),RGB_to_hex(EndingColor),RGB_to_hex(StartingColor)),255)
+    Grad = polylinear_gradient((RGB_to_hex(StartingColor),RGB_to_hex(EndingColor)),500)
 
     RList , GList , BList = Grad['r'], Grad['g'], Grad['b']
 
@@ -99,65 +99,35 @@ def MakeCBase(StartingColor=None,EndingColor=None):
 
     return ColorBase
 
-def GradCycle(MaxOffset=15,speed=3,C1=(0,255,255),C2=(120,0,255)):
+def GradCycle(MaxOffset=10,C1=(0,255,255),C2=(120,0,255)):
 
-    for Device in Dlist:# set to direct or static as a fallback
-        time.sleep(0.3)
-        try:
-            Device.set_mode('direct')
-            print('Set %s successfully'%Device.name)
-        except:
-            try:
-                print('error setting %s\nfalling back to static'%Device.name)
-                Device.set_mode('static')
-            except:
-                print("Critical error! couldn't set %s to static or direct"%Device.name)
-    
-    Offset = 1
     CBase = MakeCBase(C1,C2)
+
+    ZoneOffsets = []
+    for Device in Dlist:
+        for zone in Device.zones:
+            LEDAmmount = len(zone.leds) # the ammount of leds in a zone
+            ZoneOffsets = ZoneOffsets + [[zone, [i for i in range(1, (LEDAmmount + 1)) ], LEDAmmount ]] #setup the zone and add an offset tracker
     
-    def wait():
-        time.sleep(float('0.0%d'%speed))
-    
-    Zones = []
-    num = 0
-
-    for device in Dlist:
-        for zone in device.zones:
-            Zones = Zones + [[zone]]
-            Offset = 2
-
-            if zone.type == ZoneType.MATRIX:
-                for SubZone in zone.matrix_map:
-                    for led in SubZone:
-                        if led != None:
-                            Zones[num] = Zones[num] + [[[device.leds[led]], [Offset]]]
-            else:
-                for led in zone.leds:
-                    Zones[num] = Zones[num] + [[[led],[Offset]]]
-                    Offset += 1
-            num += 1
-
-    while True:
-        wait()
-        for Z in Zones:
-            for LED in Z[1:]:
-                Color = len(CBase)/MaxOffset
-                try:
-                    LEDColor = (int(Color)*LED[1][0])
-                except:
-                    print(LED)
-                    exit()
-                if LEDColor >= len(CBase):
-                    LEDColor = len(CBase) -1
-                CR , CB , CG = CBase[LEDColor]
-                LED[0][0].set_color(RGBColor(CR , CB , CG))
-                if LED[1][0] >= MaxOffset:
-                    LED[1][0] = 1
+    Color = len(CBase)/MaxOffset # MaxOffset changes now but for some numbers it is buggy but I am too lazy to figure out why so it defaults to 30 (which isn't buggy)
+    while True: # Run infinitely
+        for ZO in ZoneOffsets: # Grab a zone created earlier
+            for color in ZO[0].colors: # enumerate through the color entries in the zone object
+                ID = ZO[0].colors.index(color) # grab the current item index for use later (I figured this was more effective than grabbing it a lot later)
+                FinalColor = int(Color*ZO[1][ID]) # get the color to put on the LED
+                if FinalColor >= len(CBase): # make sure that it isn't out of bounds
+                    FinalColor = int(len(CBase) - 1)
+                CR, CG, CB = CBase[FinalColor]# devide it for the RGBColor module (it is really picky)
+                ZO[0].colors[ID] = RGBColor(CR, CG, CB) # Tell the zone to set that LED to the color
+                if ZO[1][ID] >= MaxOffset: # check to make sure that the offset isn't out of bounds
+                    ZO[1][ID] = 1
                 else:
-                    LED[1][0] += 1
+                    ZO[1][ID] += 1 # make the offset go up one
+            ZO[0].show() # paint all the LEDs set in the zone
+        time.sleep(0.1) # sleep so the controller can cool down
 
-if len(sys.argv) == 7:
-    GradCycle(C1=(sys.argv[1],sys.argv[2],sys.argv[3]), C2=(sys.argv[4],sys.argv[5],sys.argv[6]))
-else:
-    GradCycle()
+if __name__ == '__main__':
+    if len(sys.argv) == 7:
+        GradCycle(C1=(sys.argv[1],sys.argv[2],sys.argv[3]), C2=(sys.argv[4],sys.argv[5],sys.argv[6]))
+    else:
+        GradCycle()
