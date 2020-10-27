@@ -19,9 +19,9 @@ def SetStatic():
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 SetStatic()
 
-def CustomRainbow(MaxOffset=90): #Higher Offset = slower
+def CustomRainbow(MaxOffset=30): #Higher Offset = slower
 
-    def CreateColorBase(CycleSpeed=1):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
+    def CreateColorBase(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []
         R = 240
         G = B = 0
@@ -79,7 +79,7 @@ def CustomRainbow(MaxOffset=90): #Higher Offset = slower
         
         else:
             CB = CreateColorBase()
-            FastGoBRR = 15
+            FastGoBRR = MaxOffset
             #print('nothing is user defined')
         return CB, FastGoBRR
 
@@ -96,7 +96,7 @@ def CustomRainbow(MaxOffset=90): #Higher Offset = slower
         for ZO in ZoneOffsets: # Grab a zone created earlier
             ID = 0 # Switched to a counter based method since for some reason the .index method spat out broken numbers
             for _ in ZO[0].colors: # enumerate through the color entries in the zone object
-                FinalColor = Color*ZO[1][(ID)] # get the color to put on the LED
+                FinalColor = Color*ZO[1][ID] # get the color to put on the LED
                 if FinalColor >= len(CBase): # make sure that it isn't out of bounds
                     FinalColor = len(CBase) - 1
                 CR, CG, CB = CBase[int(FinalColor)]# devide it for the RGBColor module (it is really picky)
