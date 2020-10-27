@@ -5,8 +5,7 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
-C1 = RGBColor(255, 0, 0)
-C2 = RGBColor(0, 0, 255)
+
 
 def SetStatic():
     """A quick function I use to make sure that everything is in direct or static mode"""
@@ -32,19 +31,26 @@ for Device in Dlist:
 def InfiniteCycle():
     while True:
         for ZO in ZoneOffsets:
-            Run = 0
+            ID = 0
             Half = int(len(ZO[0].colors)/2)
             for _ in ZO[0].colors:
-                if ZO[1][Run] >= Half:
-                    ZO[0].colors[Run] = C1
-                elif ZO[1][Run] < Half:
-                    ZO[0].colors[Run] = C2
-
-                if ZO[1][Run] == ZO[2]:
-                    ZO[1][Run] = 1
+                if ZO[1][ID] >= Half:
+                    ZO[0].colors[ID] = C1
+                elif ZO[1][ID] < Half:
+                    ZO[0].colors[ID] = C2
+                if ZO[1][ID] == ZO[2]:
+                    ZO[1][ID] = 1
                 else:
-                    ZO[1][Run] += 1
-                Run += 1
+                    ZO[1][ID] += 1
+                ID += 1
             ZO[0].show()
 
-InfiniteCycle()
+if __name__ == '__main__':
+    if len(sys.argv) == 7:
+        C1 = RGBColor(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+        C2 = RGBColor(int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]))
+        InfiniteCycle()
+    else:
+        C1 = RGBColor(255, 0, 0)
+        C2 = RGBColor(0, 0, 255)
+        InfiniteCycle()

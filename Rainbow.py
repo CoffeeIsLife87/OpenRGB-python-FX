@@ -19,9 +19,9 @@ def SetStatic():
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 SetStatic()
 
-def CustomRainbow(MaxOffset=30): #Higher Offset = slower
+def CustomRainbow(MaxOffset=90): #Higher Offset = slower
 
-    def CreateColorBase(CycleSpeed=15):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
+    def CreateColorBase(CycleSpeed=1):#you must be able to devide 255 by CycleSpeed or THIS WILL NOT WORK
         CBase = []
         R = 240
         G = B = 0
@@ -94,9 +94,9 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
     Color = len(CBase)/MaxOffset # MaxOffset changes now but for some numbers it is buggy but I am too lazy to figure out why so it defaults to 30 (which isn't buggy)
     while True: # Run infinitely
         for ZO in ZoneOffsets: # Grab a zone created earlier
-            for color in ZO[0].colors: # enumerate through the color entries in the zone object
-                ID = ZO[0].colors.index(color) # grab the current item index for use later (I figured this was more effective than grabbing it a lot later)
-                FinalColor = Color*ZO[1][ID] # get the color to put on the LED
+            ID = 0 # Switched to a counter based method since for some reason the .index method spat out broken numbers
+            for _ in ZO[0].colors: # enumerate through the color entries in the zone object
+                FinalColor = Color*ZO[1][(ID)] # get the color to put on the LED
                 if FinalColor >= len(CBase): # make sure that it isn't out of bounds
                     FinalColor = len(CBase) - 1
                 CR, CG, CB = CBase[int(FinalColor)]# devide it for the RGBColor module (it is really picky)
@@ -105,8 +105,9 @@ def CustomRainbow(MaxOffset=30): #Higher Offset = slower
                     ZO[1][ID] = 1
                 else:
                     ZO[1][ID] += 1 # make the offset go up one
+                ID += 1
             ZO[0].show() # paint all the LEDs set in the zone
-        time.sleep(0.1) # sleep so the controller can cool down
+        #time.sleep(0.1) # sleep so the controller can cool down
 
 CustomRainbow() # not sure why I wrote all this as a function '_'
 # I suppose if I every merge it all into one file then it might help
