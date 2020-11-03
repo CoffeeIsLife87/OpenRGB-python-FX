@@ -74,3 +74,18 @@ currently rainbow is poorly optimized due to a lack of big brainedness on my par
 Ambient grabs the entire screen leading to some shade of white or black. hopefully this will get fixed soon
 
 The ReWrite of GradCycle and Rainbow are done so they are fully functional
+
+## Todo
+
+* Make effects reversable (some ram leds are in a different order than others)
+  * Add a toggle for device names
+
+  * Add it into the ``while True:`` loops
+
+* Make contributing easier (more templates and comments/doc strings)
+
+* Add matrix zone support for some effects (rainbow wave and gradcycle)
+
+* Smooth out some of the effects (rainbow wave)
+
+* Create GUI for launching effects (most effects are built as functions so incorporating them wouldn't be that hard)
