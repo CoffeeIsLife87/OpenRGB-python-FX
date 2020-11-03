@@ -18,6 +18,8 @@
 
 * Chase (Per request of Titanium on Discord)
 
+* Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord)
+
 ## Usage
 
 * start the openRGB sdk server, otherwise this *will not work*
