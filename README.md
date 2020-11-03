@@ -20,6 +20,8 @@
 
 * Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord)
 
+If you would like a specific effect then DM me on discord (CoffeeIsLife)
+
 ## Usage
 
 * start the openRGB sdk server, otherwise this *will not work*
@@ -72,8 +74,6 @@ if the device isn't in openRGB then the effect *will not* apply to it
 currently rainbow is poorly optimized due to a lack of big brainedness on my part (I did do some optimizations that allows me to use .show() and that made it more readable for other people)
 
 Ambient grabs the entire screen leading to some shade of white or black. hopefully this will get fixed soon
-
-The ReWrite of GradCycle and Rainbow are done so they are fully functional
 
 ## Todo
 

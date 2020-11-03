@@ -65,7 +65,7 @@ def CreateCBaseRainbow(CycleSpeed=15):
                                                             return CBase
 # ^ This one is for creating a rainbow wave (red -> orange -> yellow -> green -> blue -> purple -> red)
 
-#---------------------User input for color or speed--------------------------
+#---------------------User input---------------------------------------------
 def GrabColorOrSpeedOrBoth(Enable=3):
     """Another function for easy copy and pasting\n
     CreateCbase has to be defined for this to work or you have to modify it\n
@@ -96,6 +96,25 @@ def GrabColorOrSpeedOrBoth(Enable=3):
         FastGoBRR = 15
         #print('nothing is user defined')
     return CB, FastGoBRR
+
+def CheckForReversed():
+    """Checks for Reversed devices and reverses the ones tagged"""
+    if any('--reversed' == i for i in sys.argv): #check if there is a reverse flag
+        for i in sys.argv: # will run through all of the user input and check for the --reversed flag
+            if i == '--reversed':
+                ReversedDevices = (sys.argv.index(i) + 1) # Will point to where the device(s) that need to be reversed are
+
+        #Now that we know that there is a device(s) that needs to be reversed we can begin to parse which ones
+        #The syntax will be "Device name with spaces,Other device name" (the comma is necissary since idk when 1 device end and another begins without it)
+        if ' , ' in sys.argv[ReversedDevices]:
+            for i in sys.argv[ReversedDevices].split(' , '):
+                for D in client.devices:
+                    if D.name.strip().casefold() == i.strip().casefold():
+                        print(D.name)
+        else:
+            for D in client.devices:
+                if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
+                    print(D.name)
 
 #---------------------Set to Static------------------------------------------
 def SetStatic():

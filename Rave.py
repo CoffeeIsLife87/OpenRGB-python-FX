@@ -14,7 +14,6 @@ def set_mode():
             except:
                 print("Critical error! couldn't set %s to static or direct" %device.name)
         device.set_color(Black)
-    
 
 Black = RGBColor(0, 0, 0)
 class ColorDrop:
