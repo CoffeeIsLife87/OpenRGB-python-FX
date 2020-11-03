@@ -54,7 +54,7 @@ If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 Effects are stored in their own .py file for now
 
-```
+```python
 import openrgb , time , string , colorsys , sys
 from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
 
