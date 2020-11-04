@@ -89,3 +89,5 @@ Ambient grabs the entire screen leading to some shade of white or black. hopeful
 * Smooth out some of the effects (rainbow wave)
 
 * Create GUI for launching effects (most effects are built as functions so incorporating them wouldn't be that hard)
+
+* Allow effect per device (effect on only 1 ram stick for example)

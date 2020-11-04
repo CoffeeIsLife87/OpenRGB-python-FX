@@ -1,4 +1,9 @@
-#This is a file containing only templates for certain functions
+import sys, openrgb, time, random
+from openrgb.utils import RGBColor
+client = openrgb.OpenRGBClient()
+
+def CreateCBase():
+    return [1,2,3]
 
 #---------------------Color Base generators----------------------------------
 def CreateCBaseFTB(C = (255,255,255)):
@@ -66,55 +71,49 @@ def CreateCBaseRainbow(CycleSpeed=15):
 # ^ This one is for creating a rainbow wave (red -> orange -> yellow -> green -> blue -> purple -> red)
 
 #---------------------User input---------------------------------------------
-def GrabColorOrSpeedOrBoth(Enable=3):
-    """Another function for easy copy and pasting\n
-    CreateCbase has to be defined for this to work or you have to modify it\n
-    You can also enable or disable certain parts (1 is only enable color, 2 is only speed, 3 is both enabled)"""
-    if (Enable == 1) or (Enable == 3):
-        if (len(sys.argv) == 4):
-            CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
-            FastGoBRR = 15
-            print('user defined color')
 
-    if (Enable == 2) or (Enable == 3):
-        if len(sys.argv) == 2:
-            CB = CreateCBase()
-            FastGoBRR = int(sys.argv[1])
-            #print('user defined speed')
-            if len(CB)%FastGoBRR != 0:
-                print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
-                FastGoBRR = 15
-    
-    if (Enable == 3):
-        if len(sys.argv) == 5:
-            CB = CreateCBase(C=(int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4])))
-            FastGoBRR = int(sys.argv[1])
-            #print('user defined both')
-    
-    else:
-        CB = CreateCBase()
-        FastGoBRR = 15
-        #print('nothing is user defined')
-    return CB, FastGoBRR
-
-def CheckForReversed():
-    """Checks for Reversed devices and reverses the ones tagged"""
-    if any('--reversed' == i for i in sys.argv): #check if there is a reverse flag
-        for i in sys.argv: # will run through all of the user input and check for the --reversed flag
-            if i == '--reversed':
-                ReversedDevices = (sys.argv.index(i) + 1) # Will point to where the device(s) that need to be reversed are
-
-        #Now that we know that there is a device(s) that needs to be reversed we can begin to parse which ones
-        #The syntax will be "Device name with spaces,Other device name" (the comma is necissary since idk when 1 device end and another begins without it)
-        if ' , ' in sys.argv[ReversedDevices]:
-            for i in sys.argv[ReversedDevices].split(' , '):
+def UserInput():
+    """It will always return 5 things;\n
+    Color1, Color2, Speed, Devices for reversal, Devices that are enables"""
+    Color1 = Color2 = ReversedDevice = OnlySet = None
+    for arg in sys.argv:
+        if arg == '--C1':
+            Pos = sys.argv.index(arg) + 1
+            R, G, B = sys.argv[Pos:(Pos + 3)]
+            Color1 = RGBColor(int(R),int(G),int(B))
+        elif arg == '--C2':
+            Pos = sys.argv.index(arg) + 1
+            R, G, B = sys.argv[Pos:(Pos + 3)]
+            Color2 = RGBColor(int(R),int(G),int(B))
+        elif arg == '--reversed':
+            ReversedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that need to be reversed are
+            if ' , ' in sys.argv[ReversedDevices]:
+                ReversedDevice = []
+                for i in sys.argv[ReversedDevices].split(' , '):
+                    for D in client.devices:
+                        if D.name.strip().casefold() == i.strip().casefold():
+                            ReversedDevice += [D.name]
+            else:
                 for D in client.devices:
-                    if D.name.strip().casefold() == i.strip().casefold():
-                        print(D.name)
+                    if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
+                        ReversedDevice = [D.name]
+        elif arg == '--only-set':
+            AllowedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that are allowed are
+            if ' , ' in sys.argv[AllowedDevices]:
+                for i in sys.argv[AllowedDevices].split(' , '):
+                    OnlySet = []
+                    for D in client.devices:
+                        if D.name.strip().casefold() == i.strip().casefold():
+                            OnlySet += [D.name]
+            else:
+                for D in client.devices:
+                    if D.name.strip().casefold() == sys.argv[AllowedDevices].strip().casefold():
+                        OnlySet = [D.name]
+        if arg == '--speed':
+            Speed = sys.argv[(sys.argv.index(arg) + 1)]
         else:
-            for D in client.devices:
-                if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
-                    print(D.name)
+            pass
+    return(Color1, Color2, Speed, ReversedDevice, OnlySet)
 
 #---------------------Set to Static------------------------------------------
 def SetStatic():
