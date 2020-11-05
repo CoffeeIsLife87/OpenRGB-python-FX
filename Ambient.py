@@ -1,6 +1,5 @@
 import time, os
 from PIL import ImageGrab #pip3 install Pillow
-from colour import Color #pip3 install Colour
 from openrgb import OpenRGBClient #pip3 install openrgb-python
 from openrgb.utils import RGBColor
  
@@ -19,7 +18,7 @@ client = OpenRGBClient() #will only work if you use default ip/port for OpenRGB 
 Dlist = client.devices
  
 def SetStatic():
-    for Device in client.devices:
+    for Device in Dlist:
         time.sleep(0.1)
         try:
             Device.set_mode('direct')
@@ -58,19 +57,15 @@ while True:
     for y in range(0, image.size[1], DECIMATE):  #loop over the height
         for x in range(0, image.size[0], DECIMATE):  #loop over the width
             color = image.getpixel((x, y))  #grab a pixel
-            red = red + color[0]
-            green = green + color[1]
-            blue = blue + color[2]
+            red += color[0]
+            green += color[1]
+            blue += color[2]
  
  
-    red = (( red / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )/255.0
-    green = ((green / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )/255.0
-    blue = ((blue / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )/255.0
-    c= Color(rgb=(red, green, blue))  
-    print(c.rgb)
-    print(hex_to_rgb(c.hex))
-    RGBKB = hex_to_rgb(c.hex)
-
-    for D in Dlist:
-        D.set_color(RGBColor(RGBKB[0],RGBKB[1],RGBKB[2]))
-        time.sleep(0.001)
+    red = (( red / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
+    green = ((green / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
+    blue = ((blue / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
+    print(red, green, blue)
+    for Device in Dlist:
+        Device.set_color(RGBColor(int(red), int(green), int(blue)))
+    time.sleep(0.1)
