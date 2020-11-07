@@ -5,11 +5,46 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "OnlyRam",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--only-set",
+                "corsair vengeance pro rgb"
+            ]
+        },
+        {
+            "name": "Find errors",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Reverse testing",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--reversed",
+                "asrock polychome v2",
+            ]
+        },
+        {
+            "name": "AllArgs",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--reversed",
+                "corsair vengeance pro rgb",
+                "--only-set",
+                "corsair vengeance pro rgb"
+            ]
         }
     ]
 }
