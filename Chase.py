@@ -61,35 +61,36 @@ def SetStatic(Dlist):
 def InfiniteCycle(C1, C2, ZoneOffsets):
     while True:
         for ZO in ZoneOffsets:
-            print(ZO)
-            if ZO[3] == True:
-                ID = 0
-                Half = int(len(ZO[0].colors)/2)
-                for _ in ZO[0].colors:
-                    if ZO[1][ID] >= Half:
-                        ZO[0].colors[ID] = C1
-                    elif ZO[1][ID] < Half:
-                        ZO[0].colors[ID] = C2
-                    if ZO[1][ID] == ZO[2]:
-                        ZO[1][ID] = 1
-                    else:
-                        ZO[1][ID] += 1
-                    ID += 1
-                ZO[0].show()
-            elif ZO[3] == False:
-                ID = 0
-                Half = int(len(ZO[0].colors)/2)
-                for _ in ZO[0].colors:
-                    if ZO[1][ID] >= Half:
-                        ZO[0].colors[ID] = C2
-                    elif ZO[1][ID] < Half:
-                        ZO[0].colors[ID] = C1
-                    if ZO[1][ID] == ZO[2]:
-                        ZO[1][ID] = 1
-                    else:
-                        ZO[1][ID] += 1
-                    ID += 1
-                ZO[0].show()
+            if ZO[0].type == ZoneType.LINEAR:
+                print(ZO[0].colors[0])
+                if ZO[3] == True: # True is reversed, False is regular
+                    ID = 0
+                    Half = int(len(ZO[0].colors)/2)
+                    for _ in ZO[0].colors:
+                        if ZO[1][ID] > Half:
+                            ZO[0].colors[ID] = C1
+                        elif ZO[1][ID] <= Half:
+                            ZO[0].colors[ID] = C2
+                        if ZO[1][ID] >= ZO[2]:
+                            ZO[1][ID] = 1
+                        else:
+                            ZO[1][ID] += 1
+                        ID += 1
+                    ZO[0].show()
+                elif ZO[3] == False:
+                    ID = 0
+                    Half = int(len(ZO[0].colors)/2)
+                    for _ in ZO[0].colors:
+                        if ZO[1][ID] >= Half:
+                            ZO[0].colors[ID] = C1
+                        elif ZO[1][ID] < Half:
+                            ZO[0].colors[ID] = C2
+                        if ZO[1][ID] <= 0:
+                            ZO[1][ID] = ZO[2]
+                        else:
+                            ZO[1][ID] -= 1
+                        ID += 1
+                    ZO[0].show()
         time.sleep(0.1)
 
 if __name__ == '__main__':
@@ -107,12 +108,15 @@ if __name__ == '__main__':
 
     PassTo = []
     for Device in Enable:
-        for R in Reversed:
-            if R == Device:
-                ReverseBool = True
-                continue
-            else:
-                ReverseBool = False
+        if Reversed != None:
+            for R in Reversed:
+                if R == Device:
+                    ReverseBool = True
+                    continue
+                else:
+                    ReverseBool = False
+        else:
+            ReverseBool = False
         for zone in Device.zones:
             LEDAmmount = len(zone.leds) # the ammount of leds in a zone
             PassTo += [[zone, [i for i in range(1, (LEDAmmount + 1)) ], LEDAmmount, ReverseBool]]

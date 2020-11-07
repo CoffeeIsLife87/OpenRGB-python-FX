@@ -45,6 +45,30 @@
                 "--only-set",
                 "corsair vengeance pro rgb"
             ]
+        },
+        {
+            "name": "AllArgs(Debug)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--reversed",
+                "debug dram",
+                "--only-set",
+                "debug dram"
+            ]
+        },
+        {
+            "name": "OnlyRam(debug)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--only-set",
+                "debug dram"
+            ]
         }
     ]
 }
