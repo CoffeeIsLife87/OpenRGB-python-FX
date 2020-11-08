@@ -75,7 +75,7 @@ def CreateCBaseRainbow(CycleSpeed=15):
 def UserInput():
     """It will always return 5 things;\n
     Color1, Color2, Speed, Devices for reversal, Devices that are enables"""
-    Color1 = Color2 = ReversedDevice = OnlySet = None
+    Color1 = Color2 = Speed = ReversedDevice = OnlySet = None
     for arg in sys.argv:
         if arg == '--C1':
             Pos = sys.argv.index(arg) + 1
@@ -92,11 +92,11 @@ def UserInput():
                 for i in sys.argv[ReversedDevices].split(' , '):
                     for D in client.devices:
                         if D.name.strip().casefold() == i.strip().casefold():
-                            ReversedDevice += [D.name]
+                            ReversedDevice += [D]
             else:
                 for D in client.devices:
                     if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
-                        ReversedDevice += [D.name]
+                        ReversedDevice += [D]
         elif arg == '--only-set':
             AllowedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that are allowed are
             OnlySet = []
@@ -104,11 +104,11 @@ def UserInput():
                 for i in sys.argv[AllowedDevices].split(' , '):
                     for D in client.devices:
                         if D.name.strip().casefold() == i.strip().casefold():
-                            OnlySet += [D.name]
+                            OnlySet += [D]
             else:
                 for D in client.devices:
                     if D.name.strip().casefold() == sys.argv[AllowedDevices].strip().casefold():
-                        OnlySet += [D.name]
+                        OnlySet += [D]
         elif arg == '--speed':
             Speed = sys.argv[(sys.argv.index(arg) + 1)]
         else:
