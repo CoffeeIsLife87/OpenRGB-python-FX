@@ -103,7 +103,8 @@ def InfiniteCycle(C1, C2, ZoneOffsets):
                         ID += 1
                     ZO[0].show()
             elif ZOType == ZoneType.MATRIX:
-                print('matrix support not done yet')
+                pass
+                #print('matrix support not done yet')
         time.sleep(0.1)
 
 if __name__ == '__main__':
