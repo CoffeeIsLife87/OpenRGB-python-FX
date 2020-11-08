@@ -2,7 +2,7 @@ import sys, openrgb, time, random
 from openrgb.utils import RGBColor
 client = openrgb.OpenRGBClient()
 
-def CreateCBase():
+def CreateCBase(): #this is only to stop errors from appearing in this file, it is NOT a template
     return [1,2,3]
 
 #---------------------Color Base generators----------------------------------
@@ -87,8 +87,8 @@ def UserInput():
             Color2 = RGBColor(int(R),int(G),int(B))
         elif arg == '--reversed':
             ReversedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that need to be reversed are
+            ReversedDevice = []
             if ' , ' in sys.argv[ReversedDevices]:
-                ReversedDevice = []
                 for i in sys.argv[ReversedDevices].split(' , '):
                     for D in client.devices:
                         if D.name.strip().casefold() == i.strip().casefold():
@@ -96,20 +96,20 @@ def UserInput():
             else:
                 for D in client.devices:
                     if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
-                        ReversedDevice = [D.name]
+                        ReversedDevice += [D.name]
         elif arg == '--only-set':
             AllowedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that are allowed are
+            OnlySet = []
             if ' , ' in sys.argv[AllowedDevices]:
                 for i in sys.argv[AllowedDevices].split(' , '):
-                    OnlySet = []
                     for D in client.devices:
                         if D.name.strip().casefold() == i.strip().casefold():
                             OnlySet += [D.name]
             else:
                 for D in client.devices:
                     if D.name.strip().casefold() == sys.argv[AllowedDevices].strip().casefold():
-                        OnlySet = [D.name]
-        if arg == '--speed':
+                        OnlySet += [D.name]
+        elif arg == '--speed':
             Speed = sys.argv[(sys.argv.index(arg) + 1)]
         else:
             pass
