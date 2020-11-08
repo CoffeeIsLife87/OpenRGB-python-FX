@@ -90,15 +90,15 @@ def UserInput():
                     if D.name.strip().casefold() == sys.argv[AllowedDevices].strip().casefold():
                         OnlySet += [D]
         elif arg == '--speed':
-            Speed = sys.argv[(sys.argv.index(arg) + 1)]
+            Speed = int(sys.argv[(sys.argv.index(arg) + 1)])
         else:
             pass
     return(Color1, Color2, Speed, ReversedDevice, OnlySet)
 
 #---------------------Set to Static------------------------------------------
-def SetStatic():
+def SetStatic(Dlist):
     """A quick function I use to make sure that everything is in direct or static mode"""
-    for Device in client.devices:
+    for Device in Dlist:
         time.sleep(0.1)
         try:
             Device.set_mode('direct')

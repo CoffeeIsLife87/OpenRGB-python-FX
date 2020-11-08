@@ -5,8 +5,9 @@ client = openrgb.OpenRGBClient()
 
 Dlist = client.devices
 
-def SetStatic():
-    for Device in client.devices:
+def SetStatic(Dlist):
+    """A quick function I use to make sure that everything is in direct or static mode"""
+    for Device in Dlist:
         time.sleep(0.1)
         try:
             Device.set_mode('direct')
@@ -122,6 +123,8 @@ if __name__ == "__main__":
         Enable += [i for i in client.devices]
     elif Enabled != None:
         Enable = Enabled
+
+    SetStatic(Enable)
 
     PassTo = []
     for Device in Enable:
