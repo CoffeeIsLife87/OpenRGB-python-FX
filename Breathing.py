@@ -3,11 +3,9 @@ from openrgb.utils import RGBColor , ModeData , DeviceType , ZoneType
 
 client = openrgb.OpenRGBClient()
 
-Dlist = client.devices
-
-def SetStatic():
+def SetStatic(DList):
     """A quick function I use to make sure that everything is in direct or static mode"""
-    for Device in client.devices:
+    for Device in DList:
         time.sleep(0.1)
         try:
             Device.set_mode('direct')
@@ -18,7 +16,7 @@ def SetStatic():
                 print('error setting %s\nfalling back to static'%Device.name)
             except:
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
-SetStatic()
+
 
 def CreateCBase(C = (255,255,255)):
     """Creates a data base of 255 colors to index for use later\n
@@ -41,54 +39,65 @@ def CreateCBase(C = (255,255,255)):
             else:
                 if i > 0: # only subtract if it is greater than 0 (to avoid the SDK yelling at me)
                     i -= 1 # subtract
-            AddC = AddC + [i] # add all the numbers together again to get the color code
+            AddC += [i] # add all the numbers together again to get the color code
         RunThrough += 1 # increase the pass amount
         #print(AddC) # print the color code for debugging (will be commented for release)
         C = AddC # This is neccisary for ensure it doesn't get stuck in a loop due to it comparing a static value in the While loop
-        CBase = CBase + [C]
+        CBase += [C]
     return CBase
 
-def GrabColorOrSpeedOrBoth(Enable=3):
-    """Another function for easy copy and pasting\n
-    CreateCbase has to be defined for this to work or you have to modify it\n
-    You can also enable or disable certain parts (1 is only enable color, 2 is only speed, 3 is both enabled)"""
-    if len(sys.argv) > 1:
-        if (Enable == 1) or (Enable == 3):
-            if (len(sys.argv) == 4):
-                CB = CreateCBase(C=(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3])))
-                FastGoBRR = 15
-                print('user defined color')
-
-        if (Enable == 2) or (Enable == 3):
-            if len(sys.argv) == 2:
-                CB = CreateCBase()
-                FastGoBRR = int(sys.argv[1])
-                print('user defined speed')
-                if len(CB)%FastGoBRR != 0:
-                    print('255 is not devisable by %f (Defaulting to 15)\nPlease try to pick a number that is'%FastGoBRR)
-                    FastGoBRR = 15
-    
-        if (Enable == 3):
-            if len(sys.argv) == 5:
-                CB = CreateCBase(C=(int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4])))
-                FastGoBRR = int(sys.argv[1])
-                print('user defined both')
-    
-    else:
-        CB = CreateCBase()
-        FastGoBRR = 15
-        print('nothing is user defined')
-    return CB, FastGoBRR
+def UserInput():
+    """It will always return 5 things;\n
+    Color1, Color2, Speed, Devices for reversal, Devices that are enables"""
+    Color1 = Color2 = Speed = ReversedDevice = OnlySet = None
+    for arg in sys.argv:
+        if arg == '--C1':
+            Pos = sys.argv.index(arg) + 1
+            R, G, B = sys.argv[Pos:(Pos + 3)]
+            Color1 = RGBColor(R,G,B)
+        elif arg == '--C2':
+            Pos = sys.argv.index(arg) + 1
+            R, G, B = sys.argv[Pos:(Pos + 3)]
+            Color2 = RGBColor(int(R),int(G),int(B))
+        elif arg == '--reversed':
+            ReversedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that need to be reversed are
+            ReversedDevice = []
+            if ' , ' in sys.argv[ReversedDevices]:
+                for i in sys.argv[ReversedDevices].split(' , '):
+                    for D in client.devices:
+                        if D.name.strip().casefold() == i.strip().casefold():
+                            ReversedDevice += [D]
+            else:
+                for D in client.devices:
+                    if D.name.strip().casefold() == sys.argv[ReversedDevices].strip().casefold():
+                        ReversedDevice += [D]
+        elif arg == '--only-set':
+            AllowedDevices = (sys.argv.index(arg) + 1) # Will point to where the device(s) that are allowed are
+            OnlySet = []
+            if ' , ' in sys.argv[AllowedDevices]:
+                for i in sys.argv[AllowedDevices].split(' , '):
+                    for D in client.devices:
+                        if D.name.strip().casefold() == i.strip().casefold():
+                            OnlySet += [D]
+            else:
+                for D in client.devices:
+                    if D.name.strip().casefold() == sys.argv[AllowedDevices].strip().casefold():
+                        OnlySet += [D]
+        elif arg == '--speed':
+            Speed = int(sys.argv[(sys.argv.index(arg) + 1)])
+        else:
+            pass
+    return(Color1, Color2, Speed, ReversedDevice, OnlySet)
 
 def FBounce(ColorWall,Speed): # makes the lights get brighter
     for color in ColorWall:
         if (ColorWall.index(color)%Speed == 0) or (ColorWall.index(color) == 254):
             if (ColorWall.index(color) == 254):
-                for Device in Dlist:
+                for Device in DList:
                     Device.set_color(RGBColor(color[0], color[1], color[2]))
                     time.sleep(0.1)
             else:
-                for Device in Dlist:
+                for Device in DList:
                     Device.set_color(RGBColor(color[0], color[1], color[2]))
                     time.sleep(0.01)
     time.sleep(2)
@@ -96,12 +105,23 @@ def FBounce(ColorWall,Speed): # makes the lights get brighter
 def BBounce(ColorWall,Speed): # makes the lights get darker
     for color in reversed(ColorWall):
         if (ColorWall.index(color)%Speed == 0):
-            for Device in Dlist:
+            for Device in DList:
                 Device.set_color(RGBColor(color[0], color[1], color[2]))
                 time.sleep(0.01)
 
 if __name__ == '__main__':
-    LotsOfColors, Speed = GrabColorOrSpeedOrBoth()
+    C1,_,Speed,_,Enabled = UserInput()
+    if C1 != None:
+        CBase = CreateCBase(C1)
+    elif C1 == None:
+        CBase = CreateCBase()
+    if Speed == None:
+        Speed = 15
+    DList = []
+    if Enabled == None:
+        DList += [i for i in client.devices]
+    elif Enabled != None:
+        DList += [i for i in Enabled] 
     while True:
-        FBounce(LotsOfColors,Speed)
-        BBounce(LotsOfColors,Speed)
+        FBounce(CBase,Speed)
+        BBounce(CBase,Speed)

@@ -38,7 +38,20 @@
             ]
         },
         {
-            "name": "AllArgs",
+            "name": "Reverse testing(with custom color)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--reversed",
+                "debug dram",
+                "--C1",
+                "0", "255","0",
+            ]
+        },
+        {
+            "name": "Reverse+OnlySet",
             "type": "python",
             "request": "launch",
             "program": "${file}",

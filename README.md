@@ -2,23 +2,25 @@
 
 ## Effect List
 
-* Rainbow wave (now speed controllable but is buggy for some speeds)
+### UI is user input, *not* gui this time. sorry
 
-* Spectrum cycling (Credit to James Potkukelkka on discord for this one)
+* Rainbow wave (UI reworked)
 
-* Gradient cycling
+* Spectrum cycling (cycle.py) (Credit to James Potkukelkka on discord for this one) (UI reworked)
 
-* Breathing
+* Gradient cycling (UI reworked)
 
-* Ambient (credit to usrErr0r on discord for this one, Not working on linux due to ImageGrab not having an import)
+* Breathing (UI reworked)
 
-* Rain (**Massive** thanks and credit to Bahorn on discord for this one)
+* Ambient (credit to usrErr0r on discord for this one, Not working on linux due to ImageGrab not having an import) (I don't have windows due to the pinned issue in openRGB sdk channel in discord, long story short: PSU is dieing, RMAed, Waiting for a new unit, until then I am using my brothers PC with my spare SSD so I don't have to touch his install, said SSD is running linux)
 
-* Cram
+* Rain (**Massive** thanks and credit to Bahorn on discord for this one) (UI reworked)
 
-* Chase (Per request of Titanium on Discord)
+* Cram (UI reworked)
 
-* Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord)
+* Chase (Per request of Titanium on Discord) (UI reworked)
+
+* Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord) (UI reworked)
 
 If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
@@ -36,19 +38,27 @@ If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 * enjoy the effect :)
 
-### usage note
+### Most effects support flags, See the table below for details
 
-* Some effects support custom colors (gradcycle, breathing, and rain)
+Effect (left to right), Flag (top to bottom)
 
-  * To use custom colors you must have 3(for breathing) or 6(for gradcycle) numbers ranging 0 to 255
+|         | Ambient| Breathing | Chase | Cram | Cycle | Gradcycle | Rain | Rainbow wave | Rave|
+|---------|--------|-----------|-------|------|-------|-----------|------|--------------|-----|
+|C1       | No     | Yes       | Yes   | Yes  | No    | Yes       | Yes  | No           | No  |
+|C2       | No     | No        | Yes   | No   | No    | Yes       | No   | No           | No  |
+|Speed    | No     | Yes       | No    | No   | No    | Yes       | No   | Yes          | No  |
+|Reversed | No     | No        | Yes   | No   | No    | Yes       | Yes  | Yes          | Yes |
+|Only-Set | No     | Yes       | Yes   | Yes  | Yes   | Yes       | Yes  | Yes          | Yes |
 
-  * something like ```python(3) gradcycle.py 0 255 255 255 30 0``` or ```python(3) breathing.py 0 255 90```
+* ``--C1``: AKA Color 1. Usage is ``python file.py --C1 Value(0 - 255) Value(0 - 255) Value(0-255)`` or ``python file --C1 0 0 255``
 
-* Ambient requires some special python modules
+* ``--C2``: AKA Color 2. Same Usage as C1 but with a different flag
 
-  * ```pip install pillow colour``` or ```pip3 install pillow colour``` (again, you may also need to add ```--user``` to the end for it to work)
+* ``--speed``: Self explanitory, It is kinda hard to implement or I am lazy so it isn't in a lot of effects. Usage is ``python file.py --speed int`` (any number is fine but I haven't tested over 50)
 
-* For effects that have custom speeds, the speed comes before the color (``python Breathing 5(speed) 255 0 0(color)``)
+* ``--reversed``: Reverses effects for specific devices. Usage is ``python file.py --reversed "example device"`` or ``python file.py --reversed "device 1 , device 2`` for multiple devices. seperate the devices by `` , ``(space comma space)
+
+* ``--only-set``: Used if you only want to apply the effect to one device. I made it a goal for all effects to use this flag. Enables all devices if the flag isn't called. Also same usage as --reversed but with a different flag
 
 ## Writing effects
 
@@ -77,11 +87,6 @@ Ambient grabs the entire screen leading to some shade of white or black. hopeful
 
 ## Todo
 
-* Make effects reversable (some ram leds are in a different order than others)
-  * Add a toggle for device names
-
-  * Add it into the ``while True:`` loops
-
 * Make contributing easier (more templates and comments/doc strings)
 
 * Add matrix zone support for some effects (rainbow wave and gradcycle)
@@ -89,5 +94,3 @@ Ambient grabs the entire screen leading to some shade of white or black. hopeful
 * Smooth out some of the effects (rainbow wave)
 
 * Create GUI for launching effects (most effects are built as functions so incorporating them wouldn't be that hard)
-
-* Allow effect per device (effect on only 1 ram stick for example)
