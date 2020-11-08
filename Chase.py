@@ -59,10 +59,21 @@ def SetStatic(Dlist):
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 
 def InfiniteCycle(C1, C2, ZoneOffsets):
+    RunThrough = 0
     while True:
         for ZO in ZoneOffsets:
-            if ZO[0].type == ZoneType.LINEAR:
-                print(ZO[0].colors[0])
+            ZOType = ZO[0].type
+            if ZOType == ZoneType.SINGLE:
+                RunThrough += 1
+                if (RunThrough%3) == 0:
+                    if ZO[0].colors[0] == C1:
+                        ZO[0].colors[0] = (C2)
+                    elif ZO[0].colors[0] == C2:
+                        ZO[0].colors[0] = (C1)
+                    elif (ZO[0].colors[0] != C1) & (ZO[0].colors[0] != C2):
+                        ZO[0].colors[0] = (C2)
+                    ZO[0].show()
+            elif ZOType == ZoneType.LINEAR:
                 if ZO[3] == True: # True is reversed, False is regular
                     ID = 0
                     Half = int(len(ZO[0].colors)/2)
@@ -91,6 +102,8 @@ def InfiniteCycle(C1, C2, ZoneOffsets):
                             ZO[1][ID] -= 1
                         ID += 1
                     ZO[0].show()
+            elif ZOType == ZoneType.MATRIX:
+                print('matrix support not done yet')
         time.sleep(0.1)
 
 if __name__ == '__main__':
