@@ -1,4 +1,4 @@
-import sys, openrgb, time, random
+import sys, openrgb, time, random, colorsys
 from openrgb.utils import RGBColor
 client = openrgb.OpenRGBClient()
 
@@ -36,39 +36,19 @@ def CreateCBaseFTB(C = (255,255,255)):
 # ^ This one is Fade to black (you can reverse from black to original using reverse(Cbase) )
 
 def CreateCBaseRainbow(CycleSpeed=15):
-    CBase = []
-    R = 240
-    G = B = 0
-    while True:
-        R += 3
-        CBase = CBase + [(R,G,B)]
-        if R == 255:
-            while True:
-                G += CycleSpeed
-                CBase = CBase + [(R,G,B)]
-                if G == 255:
-                    while True:
-                        R -= CycleSpeed
-                        CBase = CBase + [(R,G,B)]
-                        if R == 0:
-                            while True:
-                                B += CycleSpeed
-                                CBase = CBase + [(R,G,B)]
-                                if B == 255:
-                                    while True:
-                                        G -= CycleSpeed
-                                        CBase = CBase + [(R,G,B)]
-                                        if G == 0:
-                                            while True:
-                                                R += CycleSpeed
-                                                CBase = CBase + [(R,G,B)]
-                                                if R == 255:
-                                                    while True:
-                                                        B -= CycleSpeed
-                                                        CBase = CBase + [(R,G,B)]
-                                                        if B == 0:
-                                                            return CBase
-# ^ This one is for creating a rainbow wave (red -> orange -> yellow -> green -> blue -> purple -> red)
+    Cbase = []
+    CycleSpeed = 300
+    hue_range = CycleSpeed
+    for i in range(hue_range):
+        color = colorsys.hsv_to_rgb(i / hue_range, 1.0, 1.0)
+
+        # Split RGB values
+        R = int(color[0] * 255)
+        G = int(color[1] * 255)
+        B = int(color[2] * 255)
+        Cbase += [RGBColor(R,G,B)]
+    return(Cbase)
+#rainbow wave creation
 
 #---------------------User input---------------------------------------------
 
