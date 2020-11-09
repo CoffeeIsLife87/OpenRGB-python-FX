@@ -4,23 +4,23 @@
 
 ### UI is user input, *not* gui this time. sorry
 
-* Rainbow wave (UI reworked)
+* Rainbow wave
 
-* Spectrum cycling (cycle.py) (Credit to James Potkukelkka on discord for this one) (UI reworked)
+* Spectrum cycling (cycle.py) (Credit to James Potkukelkka on discord for this one)
 
-* Gradient cycling (UI reworked)
+* Gradient cycling
 
-* Breathing (UI reworked)
+* Breathing
 
-* Ambient (credit to usrErr0r on discord for this one, Not working on linux due to ImageGrab not having an import) (I don't have windows due to the pinned issue in openRGB sdk channel in discord, long story short: PSU is dieing, RMAed, Waiting for a new unit, until then I am using my brothers PC with my spare SSD so I don't have to touch his install, said SSD is running linux)
+* Ambient (credit to usrErr0r on discord for this one, Not working on linux due to ImageGrab not having an import)
 
-* Rain (**Massive** thanks and credit to Bahorn on discord for this one) (UI reworked)
+* Rain (**Massive** thanks and credit to Bahorn on discord for this one)
 
-* Cram (UI reworked)
+* Cram
 
-* Chase (Per request of Titanium on Discord) (UI reworked)
+* Chase (Per request of Titanium on Discord)
 
-* Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord) (UI reworked)
+* Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord)
 
 If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
