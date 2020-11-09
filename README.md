@@ -2,8 +2,6 @@
 
 ## Effect List
 
-### UI is user input, *not* gui this time. sorry
-
 * Rainbow wave
 
 * Spectrum cycling (cycle.py) (Credit to James Potkukelkka on discord for this one)
