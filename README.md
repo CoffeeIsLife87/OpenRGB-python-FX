@@ -2,11 +2,11 @@
 
 ## Effect List
 
-* Rainbow wave
+* Rainbow wave (rainbow.py)
 
 * Spectrum cycling (cycle.py) (Credit to James Potkukelkka on discord for this one)
 
-* Gradient cycling
+* Gradient cycling (GradCycle.py)
 
 * Breathing
 
@@ -60,6 +60,18 @@ Effect (left to right), Flag (top to bottom)
 
 ## Writing effects
 
+For an Effect to be added it need to follow a set of guidelines
+
+1. Must be somewhat legible
+
+2. Have support for single device effects (see most of the already added effects for an example)
+
+3. Must support being added as a module (The effect is a function(``def effect(args):``) and it is run through a ``if __name__ == "__main__":`` statement)
+
+4. if a zone type is not supported then make sure that you add an if statement that just doesn't set that particular zone (see rainbow.py)
+
+If you have an effect please create an MR with the effect or just @ me on discord about it and I will make any nescissary changes and add it (with credit to you in the readme of course)
+
 Effects are stored in their own .py file for now
 
 ```python
@@ -72,6 +84,8 @@ Dlist = client.devices
 ```
 
 is a good starting point
+
+Since I want this to be a fairly easy process you can just create the effect loop and I will modify it to fit the guidelines if you feel stressed about trying to meet all of the requests
 
 ## Notes
 
