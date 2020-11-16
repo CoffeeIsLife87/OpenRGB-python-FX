@@ -1,4 +1,4 @@
-import colorsys, random, string, sys, multiprocessing, time, os, openrgb
+import colorsys, random, string, sys, threading, time, os, openrgb
 from openrgb.utils import DeviceType, ModeData, RGBColor, ZoneType
 
 # or the name could also be 'The Acid's Kickin In Hard' if you want (as per @Saint Mischievous on discord)
@@ -164,5 +164,5 @@ if __name__ == "__main__":
                     surfaces.append((client, device_idx, zone_idx, C, ReverseBool))
 
         for surface in surfaces:
-            t = multiprocessing.Process(name="%s%s"%(zone.name,CName[Clist.index(C)]), target=Setup_Drop, args=surface)
+            t = threading.Thread(name="%s%s"%(zone.name,CName[Clist.index(C)]), target=Setup_Drop, args=surface)
             t.start()

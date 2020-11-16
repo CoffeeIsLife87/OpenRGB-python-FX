@@ -1,5 +1,5 @@
 # As of now all the code in this file is by bahorn with some minor modifications (moving stuff) by me
-import colorsys, random, string, sys, multiprocessing, time, os, openrgb
+import colorsys, random, string, sys, threading, time, os, openrgb
 from openrgb.utils import DeviceType, ModeData, RGBColor, ZoneType
 
 Black = RGBColor(0, 0, 0)
@@ -166,6 +166,6 @@ if __name__ == "__main__":
                 surfaces += [(client, Device_idx, zone_idx, Color, ReverseBool)]
     
     for surface in surfaces:
-        print(surface)
-        t = multiprocessing.Process(target=setup_rain, args=surface)
+        #print(surface)
+        t = threading.Thread(target=setup_rain, args=surface)
         t.start()
