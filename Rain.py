@@ -52,9 +52,8 @@ class SurfaceRain:
     """
     Connects to an OpenRGB device and displays a rain effect.
     """
-    def __init__(self, device_index, surface_index, C, ReverseBool):
+    def __init__(self, Client, device_index, surface_index, C, ReverseBool):
         self.device = None
-        client = openrgb.OpenRGBClient()
         self.device = client.devices[device_index]
 
         self.surface = self.device.zones[surface_index]
@@ -128,12 +127,12 @@ class SurfaceRain:
             state = SurfaceRain.transformer(state, ratio)
             time.sleep(1.0/refresh)
 
-def setup_rain(device_idx, surface_idx, Color, ReverseBool):
+def setup_rain(Client, device_idx, surface_idx, Color, ReverseBool):
     """
     Creates and instance of the SurfaceRain object and starts it.
     Used by threads to provide a nice interface to do this.
     """
-    inst = SurfaceRain(device_idx, surface_idx, Color, ReverseBool)
+    inst = SurfaceRain(Client, device_idx, surface_idx, Color, ReverseBool)
     inst.start(ratio=10)
 
 if __name__ == "__main__":
@@ -164,9 +163,8 @@ if __name__ == "__main__":
             ReverseBool = False
         for zone_idx, zone in enumerate(Device.zones):
             if zone.type == ZoneType.LINEAR:
-                surfaces += [(Device_idx, zone_idx, Color, ReverseBool)]
+                surfaces += [(client, Device_idx, zone_idx, Color, ReverseBool)]
     
-    del client
     for surface in surfaces:
         print(surface)
         t = multiprocessing.Process(target=setup_rain, args=surface)

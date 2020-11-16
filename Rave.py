@@ -52,10 +52,9 @@ class ColorDrop:
     """
     Connects to an OpenRGB device and displays a rain effect.
     """
-    def __init__(self, device_index, surface_index, InstColor, ReverseBool):
+    def __init__(self, client, device_index, surface_index, InstColor, ReverseBool):
         self.Color = InstColor
         self.device = None
-        client = openrgb.OpenRGBClient()
         self.device = client.devices[device_index]
         self.surface = self.device.zones[surface_index]
         if self.surface.type != ZoneType.LINEAR:
@@ -113,7 +112,6 @@ class ColorDrop:
             for i, value in enumerate(state):
                 try:
                     if prev_state[i] != value:
-                        # smooth it out
                         self.leds[i].set_color(
                             {
                                 True: self.Color,
@@ -127,12 +125,12 @@ class ColorDrop:
             state = ColorDrop.transformer(state, ratio)
             time.sleep(1.0/refresh)
 
-def Setup_Drop(device_idx, surface_idx, InstColor, ReverseBool):
+def Setup_Drop(Client, device_idx, surface_idx, InstColor, ReverseBool):
     """
     Creates and instance of the SurfaceRain object and starts it.
     Used by threads to provide a nice interface to do this.
     """
-    inst = ColorDrop(device_idx, surface_idx, InstColor, ReverseBool)
+    inst = ColorDrop(Client, device_idx, surface_idx, InstColor, ReverseBool)
     inst.start(ratio=10)
 
 if __name__ == "__main__":
@@ -163,7 +161,7 @@ if __name__ == "__main__":
                 ReverseBool = False
             for zone_idx, zone in enumerate(device.zones):
                 if zone.type == ZoneType.LINEAR:
-                    surfaces.append((device_idx, zone_idx, C, ReverseBool))
+                    surfaces.append((client, device_idx, zone_idx, C, ReverseBool))
 
         for surface in surfaces:
             t = multiprocessing.Process(name="%s%s"%(zone.name,CName[Clist.index(C)]), target=Setup_Drop, args=surface)
