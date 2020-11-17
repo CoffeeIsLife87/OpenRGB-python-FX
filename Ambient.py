@@ -43,9 +43,7 @@ while True:
     green = 0
     blue  = 0
  
-    time.sleep(LOOP_INTERVAL) #wake uAp ever so often and perform this ...
-    
-    
+    time.sleep(LOOP_INTERVAL) #wake up ever so often and perform this ...
     
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////
     # CALCULATE AVERAGE SCREEN COLOUR
@@ -65,7 +63,7 @@ while True:
     red = (( red / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
     green = ((green / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
     blue = ((blue / ( (image.size[1]/DECIMATE) * (image.size[0]/DECIMATE) ) ) )
-    print(red, green, blue)
+    #print(red, green, blue)
     for Device in Dlist:
         Device.set_color(RGBColor(int(red), int(green), int(blue)))
     time.sleep(0.1)

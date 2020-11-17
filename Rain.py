@@ -47,7 +47,6 @@ def UserInput():
             pass
     return(Color1, Color2, Speed, ReversedDevice, OnlySet)
 
-
 class SurfaceRain:
     """
     Connects to an OpenRGB device and displays a rain effect.

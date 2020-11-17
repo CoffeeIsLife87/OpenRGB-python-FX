@@ -17,7 +17,6 @@ def SetStatic(DList):
             except:
                 print("Critical error! couldn't set %s to static or direct"%Device.name)
 
-
 def CreateCBase(C = (255,255,255)):
     """Creates a data base of 255 colors to index for use later\n
     So you can grab an RGB color with ``Cbase[num]`` and have a color code\n

@@ -73,7 +73,7 @@ if __name__ == '__main__':
         Bigger = len(i.leds)
         if Check < Bigger:
             Check = Bigger
-    print(Check)
+    #print(Check)
 
     if C1 == None:
         Color = 0

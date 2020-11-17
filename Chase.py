@@ -109,7 +109,7 @@ def InfiniteCycle(C1, C2, ZoneOffsets):
 
 if __name__ == '__main__':
     C1, C2, Reversed, Enabled = UserInput()
-    print(C1, C2, Reversed, Enabled)
+    #print(C1, C2, Reversed, Enabled)
     if C1 == None:
         C1 = RGBColor(255,0,0)
     if C2 == None:

@@ -54,7 +54,8 @@ def CreateCBaseRainbow(CycleSpeed=15):
 
 def UserInput():
     """It will always return 5 things;\n
-    Color1, Color2, Speed, Devices for reversal, Devices that are enables"""
+    Color1, Color2, Speed, Devices for reversal, Devices that are enables in the form of\n
+    None/int, None/int, None/int, None/list, None/list. None is for a blank argument so make sure you add ``if == none`` to catch it"""
     Color1 = Color2 = Speed = ReversedDevice = OnlySet = None
     for arg in sys.argv:
         if arg == '--C1':

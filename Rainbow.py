@@ -140,7 +140,7 @@ if __name__ == "__main__":
         for zone in Device.zones:
             LEDAmmount = len(zone.leds) # the ammount of leds in a zone
             PassTo += [[zone, [i for i in range(1, (LEDAmmount + 1)) ], LEDAmmount, ReverseBool]]
-    print(PassTo)
+    #print(PassTo)
 
     CustomRainbow(CreateCBase(),PassTo,Speed)
     
