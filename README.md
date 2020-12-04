@@ -20,6 +20,8 @@
 
 * Rave (Basically multiple instances of rain with different colors that make a cool effect, Discovered by Saint Mischievous on discord)
 
+* Stary Night (Per request of BrandonPotter on the discord)
+
 If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 ## Usage
@@ -40,13 +42,13 @@ If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 Effect (left to right), Flag (top to bottom)
 
-|         | Ambient| Breathing | Chase | Cram | Cycle | Gradcycle | Rain | Rainbow wave | Rave|
-|---------|--------|-----------|-------|------|-------|-----------|------|--------------|-----|
-|C1       | No     | Yes       | Yes   | Yes  | No    | Yes       | Yes  | No           | No  |
-|C2       | No     | No        | Yes   | No   | No    | Yes       | No   | No           | No  |
-|Speed    | No     | Yes       | No    | No   | No    | Yes       | No   | Yes          | No  |
-|Reversed | No     | No        | Yes   | No   | No    | Yes       | Yes  | Yes          | Yes |
-|Only-Set | No     | Yes       | Yes   | Yes  | Yes   | Yes       | Yes  | Yes          | Yes |
+|         | Ambient| Breathing | Chase | Cram | Cycle | Gradcycle | Rain | Rainbow wave | Rave| Stary Night (Twinkle) |
+|---------|--------|-----------|-------|------|-------|-----------|------|--------------|-----|-----------------------|
+|C1       | No     | Yes       | Yes   | Yes  | No    | Yes       | Yes  | No           | No  | Yes                   |
+|C2       | No     | No        | Yes   | No   | No    | Yes       | No   | No           | No  | No                    |
+|Speed    | No     | Yes       | No    | No   | No    | Yes       | No   | Yes          | No  | No                    |
+|Reversed | No     | No        | Yes   | No   | No    | Yes       | Yes  | Yes          | Yes | No                    |
+|Only-Set | No     | Yes       | Yes   | Yes  | Yes   | Yes       | Yes  | Yes          | Yes | Yes                   |
 
 * ``--C1``: AKA Color 1. Usage is ``python file.py --C1 Value(0 - 255) Value(0 - 255) Value(0-255)`` or ``python file --C1 0 0 255``
 
@@ -98,8 +100,6 @@ currently rainbow is poorly optimized due to a lack of big brainedness on my par
 Ambient grabs the entire screen leading to some shade of white or black. hopefully this will get fixed soon
 
 ## Todo
-
-* Make contributing easier (more templates and comments/doc strings)
 
 * Add matrix zone support for some effects (rainbow wave and gradcycle)
 
