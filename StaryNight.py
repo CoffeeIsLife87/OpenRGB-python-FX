@@ -63,7 +63,7 @@ class LEDThread:
 def StaryEffect(client, LEDList):
     while True:
         time.sleep(1)
-        CheckIfRunning = random.randint(0,LEDCount)
+        CheckIfRunning = random.randint(0,(LEDCount - 1))
         if not LEDList[CheckIfRunning][2]:
             inst = threading.Thread(target=LEDThread, args=(client, LEDList[CheckIfRunning][0], LEDList[CheckIfRunning][1], CBase, CheckIfRunning))
             inst.start()
