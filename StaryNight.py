@@ -62,11 +62,11 @@ class LEDThread:
 
 def StaryEffect(client, LEDList):
     while True:
-        time.sleep(1)
         CheckIfRunning = random.randint(0,(LEDCount - 1))
         if not LEDList[CheckIfRunning][2]:
             inst = threading.Thread(target=LEDThread, args=(client, LEDList[CheckIfRunning][0], LEDList[CheckIfRunning][1], CBase, CheckIfRunning))
             inst.start()
+        time.sleep(0.5)
 
 def CreateCBase(C = (255,255,255)):
     """Creates a data base of 255 colors to index for use later\n
