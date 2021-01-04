@@ -12,11 +12,34 @@ LOOP_INTERVAL  = 0.05    # how often we calculate screen colour (in seconds)
 DURATION       = 3    # how long it takes bulb to switch colours (in seconds)
 DECIMATE       = 10   # skip every DECIMATE number of pixels to speed up calculation
 
+XSCREENCAPTURE  = True # Set to true if on X11, else false
+X_RES           = 2560 # Screen pixel in x direction
+Y_RES           = 1440 # screen pixel in y direction
+
 
 client = OpenRGBClient() #will only work if you use default ip/port for OpenRGB server. This is an easy fix, read the documentation if need be https://openrgb-python.readthedocs.io/en/latest/
 
 Dlist = client.devices
- 
+
+if XSCREENCAPTURE:
+    # Use X11 display manager for screen capture
+    import ctypes
+    from PIL import Image
+    LibName = 'prtscn.so' # has to be compiled previously from prtscrn.c
+    AbsLibPath = os.getcwd() + os.path.sep + LibName # assuming prtscrn.so lives in the same dir
+    grab = ctypes.CDLL(AbsLibPath)
+
+    def grab_screen(x1,y1,x2,y2):
+        w, h = x2-x1, y2-y1
+        size = w * h
+        objlength = size * 3
+
+        grab.getScreen.argtypes = []
+        result = (ctypes.c_ubyte*objlength)()
+
+        grab.getScreen(x1,y1, w, h, result)
+        return Image.frombuffer('RGB', (w, h), result, 'raw', 'RGB', 0, 1)
+
 def SetStatic():
     for Device in Dlist:
         time.sleep(0.1)
@@ -48,7 +71,10 @@ while True:
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////
     # CALCULATE AVERAGE SCREEN COLOUR
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////
-    image = ImageGrab.grab()  # take a screenshot
+    if XSCREENCAPTURE:
+      image = grab_screen(0,0,X_RES,Y_RES)  # take a screenshot usign X
+    else:
+        image = ImageGrab.grab()    # take a screenshot using PIL
     #print image.size
  
     
