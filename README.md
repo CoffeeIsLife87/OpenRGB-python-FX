@@ -101,6 +101,14 @@ currently rainbow is poorly optimized due to a lack of big brainedness on my par
 
 Ambient grabs the entire screen leading to some shade of white or black. hopefully this will get fixed soon
 
+## *Special Usage**
+
+### TempAware
+
+You may need to set a full path for the DLL if it doesn't run correctly
+
+Python also uses escape characters so if you need to use a \ (Backslash) then you will need to use 2 of them (``\\`` == ``\`` in python)
+
 ## Todo
 
 * Add matrix zone support for some effects (rainbow wave and gradcycle)
