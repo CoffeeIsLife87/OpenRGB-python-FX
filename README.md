@@ -22,6 +22,8 @@
 
 * Stary Night (Per request of BrandonPotter on the discord)
 
+* TempAware (Created by @ M_Ouz on the discord) (Only tracks GPU temp atm)
+
 If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 ## Usage
@@ -42,13 +44,13 @@ If you would like a specific effect then DM me on discord (CoffeeIsLife)
 
 Effect (left to right), Flag (top to bottom)
 
-|         | Ambient| Breathing | Chase | Cram | Cycle | Gradcycle | Rain | Rainbow wave | Rave| Stary Night (Twinkle) |
-|---------|--------|-----------|-------|------|-------|-----------|------|--------------|-----|-----------------------|
-|C1       | No     | Yes       | Yes   | Yes  | No    | Yes       | Yes  | No           | No  | Yes                   |
-|C2       | No     | No        | Yes   | No   | No    | Yes       | No   | No           | No  | No                    |
-|Speed    | No     | Yes       | No    | No   | No    | Yes       | No   | Yes          | No  | No                    |
-|Reversed | No     | No        | Yes   | No   | No    | Yes       | Yes  | Yes          | Yes | No                    |
-|Only-Set | No     | Yes       | Yes   | Yes  | Yes   | Yes       | Yes  | Yes          | Yes | Yes                   |
+|         | Ambient| Breathing | Chase | Cram | Cycle | Gradcycle | Rain | Rainbow wave | Rave| Stary Night (Twinkle) | TempAware |
+|---------|--------|-----------|-------|------|-------|-----------|------|--------------|-----|-----------------------|-----------|
+|C1       | No     | Yes       | Yes   | Yes  | No    | Yes       | Yes  | No           | No  | Yes                   | No        |
+|C2       | No     | No        | Yes   | No   | No    | Yes       | No   | No           | No  | No                    | No        |
+|Speed    | No     | Yes       | No    | No   | No    | Yes       | No   | Yes          | No  | No                    | No        |
+|Reversed | No     | No        | Yes   | No   | No    | Yes       | Yes  | Yes          | Yes | No                    | No        |
+|Only-Set | No     | Yes       | Yes   | Yes  | Yes   | Yes       | Yes  | Yes          | Yes | Yes                   | No        |
 
 * ``--C1``: AKA Color 1. Usage is ``python file.py --C1 Value(0 - 255) Value(0 - 255) Value(0-255)`` or ``python file --C1 0 0 255``
 
