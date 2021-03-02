@@ -9,7 +9,7 @@ Dlist = client.devices
 DEBUG = False
 
 def UserInput():
-    Color1 = Color2 = ReversedDevice = OnlySet = Zones = None
+    Color1 = Color2 = Colors = ReversedDevice = OnlySet = Zones = None
     Speed = 50
     for arg in sys.argv:
         if arg == '--C1':
@@ -166,8 +166,12 @@ if __name__ == '__main__':
         Colors = []
         if C1 == None:
             Colors += [RGBColor(255,0,0)]
+        else:
+            Colors += [C1]
         if C2 == None:
             Colors += [RGBColor(0,0,255)]
+        else:
+            Colors += [C2]
     Enable = []
     if Enabled == None:
         Enable += [i for i in client.devices]
