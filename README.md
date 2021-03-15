@@ -1,5 +1,7 @@
 # OpenRGB-python-FX
 
+## REPLACED BY [The effect engine plugin](https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectPlugin)
+
 ## Effect List
 
 * Rainbow wave (rainbow.py)
