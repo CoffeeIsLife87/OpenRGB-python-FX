@@ -28,8 +28,6 @@
 
 * TempAware (Created by @ M_Ouz on the discord) (Only tracks GPU temp atm)
 
-If you would like a specific effect then DM me on discord (CoffeeIsLife)
-
 ## Usage
 
 * start the openRGB sdk server, otherwise this *will not work*
@@ -99,8 +97,6 @@ Dlist = client.devices
 
 is a good starting point
 
-Since I want this to be a fairly easy process you can just create the effect loop and I will modify it to fit the guidelines if you feel stressed about trying to meet all of the requests
-
 ## Notes
 
 While this is system wide, there are some limitations.
@@ -119,10 +115,3 @@ You may need to set a full path for the DLL if it doesn't run correctly
 
 Python also uses escape characters so if you need to use a \ (Backslash) then you will need to use 2 of them (``\\`` == ``\`` in python)
 
-## Todo
-
-* Add matrix zone support for some effects (rainbow wave and gradcycle) (included in chase wave)
-
-* Smooth out some of the effects (rainbow wave)
-
-* Create GUI for launching effects (most effects are built as functions so incorporating them wouldn't be that hard)
